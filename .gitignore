@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 모델 가중치 (용량 문제로 git 제외, 별도 배포)
+*.pt
+backend/yolo/runs/
+backend/yolo/dataset/
+
+# 업로드/검출 결과 이미지
+backend/static/
+
+# Node
+node_modules/
+dist/
+
+# 환경 변수
+.env
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
