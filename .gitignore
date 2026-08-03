@@ -12,6 +12,9 @@ backend/yolo/dataset/
 # 업로드/검출 결과 이미지
 backend/static/
 
+# 로컬 개발용 SQLite DB
+*.db
+
 # Node
 node_modules/
 dist/

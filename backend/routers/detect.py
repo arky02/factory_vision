@@ -3,8 +3,11 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
+from sqlalchemy.orm import Session
 
+from database import get_db
+from models.inspection import Defect, Inspection
 from schemas.detection import DetectionResponse
 from services import preprocess
 
@@ -14,24 +17,36 @@ STATIC_DIR = Path(__file__).parent.parent / "static"
 
 
 @router.post("/detect", response_model=DetectionResponse)
-async def detect(request: Request, file: UploadFile = File(...)):
+async def detect(request: Request, file: UploadFile = File(...), db: Session = Depends(get_db)):
     data = await file.read()
     image = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
     if image is None:
         raise HTTPException(status_code=400, detail="유효한 이미지 파일이 아닙니다.")
 
     image_id = uuid.uuid4().hex
+    upload_path = f"/static/uploads/{image_id}.jpg"
+    detected_path = f"/static/detections/{image_id}.jpg"
     cv2.imwrite(str(STATIC_DIR / "uploads" / f"{image_id}.jpg"), image)
 
     processed = preprocess.run(image)
     defects, plotted = request.app.state.detector.predict(processed)
+    cv2.imwrite(str(STATIC_DIR / "detections" / f"{image_id}.jpg"), plotted)
 
-    detected_path = STATIC_DIR / "detections" / f"{image_id}.jpg"
-    cv2.imwrite(str(detected_path), plotted)
+    inspection = Inspection(
+        image_path=upload_path,
+        detected_image_path=detected_path,
+        inspection_result="NG" if defects else "OK",
+        defects=[
+            Defect(defect_type=d["type"], confidence=d["confidence"], bbox=d["bbox"])
+            for d in defects
+        ],
+    )
+    db.add(inspection)
+    db.commit()
 
     return DetectionResponse(
-        result="NG" if defects else "OK",
+        result=inspection.inspection_result,
         confidence=max((d["confidence"] for d in defects), default=None),
-        detected_image_url=f"/static/detections/{image_id}.jpg",
+        detected_image_url=detected_path,
         defects=defects,
     )
