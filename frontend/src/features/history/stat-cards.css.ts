@@ -4,10 +4,10 @@ import { font, statusColors, vars } from "../../styles/theme.css";
 
 export const grid = style({
   display: "grid",
-  gap: "1rem",
+  gap: "0.75rem",
+  gridTemplateColumns: "repeat(2, 1fr)",
   "@media": {
-    "(min-width: 640px)": { gridTemplateColumns: "repeat(2, 1fr)" },
-    "(min-width: 1024px)": { gridTemplateColumns: "repeat(4, 1fr)" },
+    "(min-width: 1024px)": { gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem" },
   },
 });
 
@@ -51,8 +51,8 @@ export const statIconWarn = style({
 });
 
 export const topDefectCard = style({
+  gridColumn: "span 2",
   "@media": {
-    "(min-width: 640px)": { gridColumn: "span 2" },
     "(min-width: 1024px)": { gridColumn: "span 4" },
   },
 });

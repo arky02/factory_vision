@@ -6,6 +6,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 import { ErrorFallback } from "@/components/feedback/error-fallback";
 import { PageSkeleton } from "@/components/feedback/page-skeleton";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { ServerStatus } from "@/components/layout/server-status";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import * as styles from "./app-layout.css";
@@ -15,6 +16,7 @@ export function AppLayout() {
 
   return (
     <div className={styles.root}>
+      {/* 데스크톱: 좌측 사이드바 */}
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <Factory size={20} className={styles.brandIcon} aria-hidden />
@@ -27,6 +29,15 @@ export function AppLayout() {
           <ServerStatus />
         </div>
       </aside>
+
+      {/* 모바일: 상단바 + 하단 탭 */}
+      <header className={styles.mobileTopbar}>
+        <div className={styles.mobileBrand}>
+          <Factory size={18} className={styles.brandIcon} aria-hidden />
+          <span className={styles.brandName}>FactoryVision</span>
+        </div>
+        <ServerStatus />
+      </header>
 
       <main className={styles.main}>
         <QueryErrorResetBoundary>
@@ -43,6 +54,8 @@ export function AppLayout() {
           )}
         </QueryErrorResetBoundary>
       </main>
+
+      <BottomNav />
     </div>
   );
 }

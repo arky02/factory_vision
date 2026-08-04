@@ -7,10 +7,15 @@ export const tableCard = style({
   overflow: "hidden",
 });
 
-/** 표 스크롤 영역 — 헤더는 sticky로 고정 */
+/** 표 스크롤 영역 — 헤더는 sticky로 고정, 좁은 화면에서는 가로 스크롤 */
 export const scrollArea = style({
   maxHeight: "26rem",
-  overflowY: "auto",
+  overflow: "auto",
+});
+
+/** 컬럼이 뭉개지지 않도록 표 최소 폭 확보 (모바일에서는 가로 스크롤) */
+export const tableMin = style({
+  minWidth: "34rem",
 });
 
 globalStyle(`${scrollArea} thead`, {

@@ -30,7 +30,7 @@ export function InspectionTable({ inspections }: { inspections: Inspection[] }) 
   return (
     <Card className={styles.tableCard}>
       <div className={styles.scrollArea}>
-        <Table>
+        <Table className={styles.tableMin}>
           <TableHeader>
             <TableRow>
               <TableHead className={styles.colImage}>결과 이미지</TableHead>
