@@ -14,11 +14,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/health": BACKEND,
-      "/detect": BACKEND,
-      "/inspections": BACKEND,
-      "/stats": BACKEND,
-      "/report": BACKEND,
+      "/api": BACKEND,
       "/static": BACKEND,
     },
   },

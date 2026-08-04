@@ -38,10 +38,10 @@ app.add_middleware(
 (STATIC_DIR / "detections").mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-app.include_router(detect.router)
-app.include_router(inspections.router)
+app.include_router(detect.router, prefix="/api")
+app.include_router(inspections.router, prefix="/api")
 
 
-@app.get("/health")
+@app.get("/api/health")
 def health():
     return {"status": "ok"}

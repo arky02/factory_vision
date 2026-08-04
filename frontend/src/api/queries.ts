@@ -11,12 +11,12 @@ import type { DetectionResponse, Inspection } from "./types";
 export const inspectionsQuery = (limit = 50) =>
   queryOptions({
     queryKey: ["inspections", limit] as const,
-    queryFn: () => getJson<Inspection[]>(`/inspections?limit=${limit}`),
+    queryFn: () => getJson<Inspection[]>(`/api/inspections?limit=${limit}`),
   });
 
 export const healthQuery = queryOptions({
   queryKey: ["health"] as const,
-  queryFn: () => getJson<{ status: string }>("/health"),
+  queryFn: () => getJson<{ status: string }>("/api/health"),
   refetchInterval: 15_000,
   retry: false,
 });
@@ -24,7 +24,7 @@ export const healthQuery = queryOptions({
 export function useDetectMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (file: File) => postImage<DetectionResponse>("/detect", file),
+    mutationFn: (file: File) => postImage<DetectionResponse>("/api/detect", file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inspections"] });
     },
