@@ -1,0 +1,64 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "backend/**"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy-backend.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false # 배포 중간에 끊기면 안 되므로 대기
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::155641294485:role/gh-actions-factory-vision
+          aws-region: ap-northeast-2
+
+      # SSM으로 EC2에서 배포 명령 실행 (포트 22 개방 불필요)
+      - name: Deploy via SSM
+        run: |
+          COMMAND_ID=$(aws ssm send-command \
+            --instance-ids i-0b577cc4773061f58 \
+            --document-name AWS-RunShellScript \
+            --comment "deploy backend ${{ github.sha }}" \
+            --parameters 'commands=[
+              "runuser -l ubuntu -c \"cd ~/factory_vision && git pull && docker compose up -d --build\""
+            ]' \
+            --query "Command.CommandId" --output text)
+          echo "CommandId: $COMMAND_ID"
+
+          # 완료 대기 + 결과 확인
+          for i in $(seq 1 60); do
+            STATUS=$(aws ssm get-command-invocation \
+              --command-id "$COMMAND_ID" \
+              --instance-id i-0b577cc4773061f58 \
+              --query "Status" --output text 2>/dev/null || echo Pending)
+            echo "status: $STATUS"
+            case $STATUS in
+              Success) break ;;
+              Failed|Cancelled|TimedOut)
+                aws ssm get-command-invocation --command-id "$COMMAND_ID" \
+                  --instance-id i-0b577cc4773061f58 \
+                  --query "StandardErrorContent" --output text
+                exit 1 ;;
+            esac
+            sleep 10
+          done
+          [ "$STATUS" = "Success" ] || { echo "배포 시간 초과"; exit 1; }
+
+      - name: Health check
+        run: |
+          sleep 5
+          curl -sf https://d3978jxy8ggw6e.cloudfront.net/api/health
