@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+*.db
+static/
+yolo/dataset/
+yolo/weights/
+yolo/runs/
+*.pt

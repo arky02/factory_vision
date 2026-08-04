@@ -1,0 +1,39 @@
+# FactoryVision 백엔드 스택 (EC2 배포용)
+#   docker compose up -d --build
+#
+# 프론트엔드는 S3 + CloudFront로 별도 배포한다 (scripts/deploy-frontend.sh).
+# 모델 가중치는 git에 없으므로 실행 전 backend/yolo/weights/best.pt 를 준비할 것.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: factory
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-factory-vision-dev}
+      POSTGRES_DB: factory_vision
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U factory -d factory_vision"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "80:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://factory:${DB_PASSWORD:-factory-vision-dev}@db:5432/factory_vision
+    volumes:
+      - ./backend/yolo/weights:/app/yolo/weights:ro
+      - static-data:/app/static
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
+  static-data:
