@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, formatPercent } from "@/lib/format";
 import * as styles from "./inspection-table.css";
 
 export function InspectionTable({ inspections }: { inspections: Inspection[] }) {
@@ -29,21 +29,23 @@ export function InspectionTable({ inspections }: { inspections: Inspection[] }) 
 
   return (
     <Card className={styles.tableCard}>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className={styles.colImage}>결과 이미지</TableHead>
-            <TableHead className={styles.colTime}>검사 시각</TableHead>
-            <TableHead className={styles.colResult}>판정</TableHead>
-            <TableHead>검출된 불량</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {inspections.map((inspection) => (
-            <InspectionRow key={inspection.id} inspection={inspection} />
-          ))}
-        </TableBody>
-      </Table>
+      <div className={styles.scrollArea}>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className={styles.colImage}>결과 이미지</TableHead>
+              <TableHead className={styles.colTime}>검사 시각</TableHead>
+              <TableHead className={styles.colResult}>판정</TableHead>
+              <TableHead>검출된 불량</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {inspections.map((inspection) => (
+              <InspectionRow key={inspection.id} inspection={inspection} />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </Card>
   );
 }
@@ -88,6 +90,9 @@ function DefectSummary({ inspection }: { inspection: Inspection }) {
       {inspection.defects.map((defect, i) => (
         <Badge key={i} variant="secondary">
           {defect.defect_type}
+          <span className={styles.badgeConfidence}>
+            {formatPercent(defect.confidence)}
+          </span>
         </Badge>
       ))}
     </div>

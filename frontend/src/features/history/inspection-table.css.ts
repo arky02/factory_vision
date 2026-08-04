@@ -1,9 +1,23 @@
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 import { font, vars } from "../../styles/theme.css";
 
 export const tableCard = style({
   paddingBlock: 0,
+  overflow: "hidden",
+});
+
+/** 표 스크롤 영역 — 헤더는 sticky로 고정 */
+export const scrollArea = style({
+  maxHeight: "26rem",
+  overflowY: "auto",
+});
+
+globalStyle(`${scrollArea} thead`, {
+  position: "sticky",
+  top: 0,
+  zIndex: 1,
+  backgroundColor: vars.card,
 });
 
 export const empty = style({
@@ -42,6 +56,13 @@ export const defectBadges = style({
   display: "flex",
   flexWrap: "wrap",
   gap: "0.25rem",
+});
+
+export const badgeConfidence = style({
+  marginLeft: "0.25rem",
+  fontVariantNumeric: "tabular-nums",
+  color: vars.mutedForeground,
+  fontWeight: 400,
 });
 
 export const noDefect = style({

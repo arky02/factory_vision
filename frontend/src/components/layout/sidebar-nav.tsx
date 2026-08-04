@@ -1,4 +1,4 @@
-import { History, LayoutDashboard, ScanSearch, Video } from "lucide-react";
+import { History, ScanSearch, Video } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
@@ -6,7 +6,6 @@ import * as styles from "./sidebar-nav.css";
 
 const NAV_ITEMS = [
   { to: "/inspect", label: "검사", icon: ScanSearch },
-  { to: "/dashboard", label: "대시보드", icon: LayoutDashboard },
   { to: "/history", label: "검사 이력", icon: History },
   { to: "/live", label: "실시간 검사", icon: Video },
 ] as const;
