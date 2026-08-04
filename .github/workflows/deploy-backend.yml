@@ -60,5 +60,14 @@ jobs:
 
       - name: Health check
         run: |
-          sleep 5
-          curl -sf https://d3978jxy8ggw6e.cloudfront.net/api/health
+          # 컨테이너 재시작 직후에는 잠시 응답이 없을 수 있으므로 최대 2분 재시도
+          for i in $(seq 1 12); do
+            if curl -sf https://d3978jxy8ggw6e.cloudfront.net/api/health; then
+              echo " → 헬스체크 통과"
+              exit 0
+            fi
+            echo "대기 중… ($i/12)"
+            sleep 10
+          done
+          echo "헬스체크 실패"
+          exit 1

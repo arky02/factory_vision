@@ -44,7 +44,10 @@ scp -i key.pem backend/yolo/weights/best.pt ubuntu@<EC2_IP>:~/
 # EC2에서:
 git clone <레포 주소> factory_vision && cd factory_vision
 mkdir -p backend/yolo/weights && mv ~/best.pt backend/yolo/weights/
-DB_PASSWORD='강력한비밀번호' docker compose up -d --build
+
+# DB 비밀번호는 .env 파일로 관리 (CI/CD도 같은 값을 읽도록)
+echo "DB_PASSWORD=$(openssl rand -hex 16)" > .env && chmod 600 .env
+docker compose up -d --build
 
 # 확인
 curl http://localhost/api/health   # {"status":"ok"}
