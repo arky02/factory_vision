@@ -4,6 +4,7 @@ import { useDetectMutation } from "@/api/queries";
 import { PageHeader } from "@/components/page-header";
 import { DetectionResultCard } from "./detection-result-card";
 import * as styles from "./inspect-page.css";
+import { PipelineCard } from "./pipeline-card";
 import { SampleGallery } from "./sample-gallery";
 import { UploadCard } from "./upload-card";
 
@@ -35,6 +36,7 @@ export function InspectPage() {
             isPending={detect.isPending}
           />
         </div>
+        <PipelineCard result={detect.data ?? null} />
         <SampleGallery onPick={handleSelect} disabled={detect.isPending} />
       </div>
     </>

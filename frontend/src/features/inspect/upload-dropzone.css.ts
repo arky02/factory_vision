@@ -4,7 +4,7 @@ import { font, vars } from "../../styles/theme.css";
 
 export const zone = style({
   display: "flex",
-  height: "16rem",
+  height: "20rem",
   width: "100%",
   flexDirection: "column",
   alignItems: "center",

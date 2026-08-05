@@ -2,28 +2,12 @@ import { style } from "@vanilla-extract/css";
 
 import { font, vars } from "../../styles/theme.css";
 
-export const toggle = style({
-  display: "flex",
-  alignItems: "center",
-  gap: "0.375rem",
-  border: "none",
-  background: "none",
-  padding: 0,
-  cursor: "pointer",
-  fontSize: font.sm,
-  fontWeight: 500,
-  color: vars.mutedForeground,
-  selectors: {
-    "&:hover": { color: vars.foreground },
-  },
-});
-
 export const track = style({
   display: "flex",
   alignItems: "center",
   gap: "0.5rem",
   overflowX: "auto",
-  paddingBlock: "0.5rem",
+  paddingBlock: "0.25rem",
 });
 
 export const stage = style({
@@ -31,7 +15,7 @@ export const stage = style({
   flexDirection: "column",
   gap: "0.375rem",
   flexShrink: 0,
-  width: "9rem",
+  width: "8.5rem",
 });
 
 export const stageImage = style({
@@ -56,5 +40,14 @@ export const stageDescription = style({
 
 export const arrow = style({
   flexShrink: 0,
+  color: vars.mutedForeground,
+});
+
+export const placeholder = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "0.5rem",
+  padding: "1rem 0",
+  fontSize: font.sm,
   color: vars.mutedForeground,
 });

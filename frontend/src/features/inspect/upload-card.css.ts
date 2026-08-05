@@ -20,15 +20,18 @@ export const preview = style({
 export const previewFrame = style({
   position: "relative",
   overflow: "hidden",
+  height: "20rem", // 드롭존과 동일한 고정 높이 → 상태 전환 시 layout shift 없음
   borderRadius: `calc(${vars.radius} - 2px)`,
   border: `1px solid ${vars.border}`,
   backgroundColor: `color-mix(in oklab, ${vars.muted} 30%, transparent)`,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 });
 
 export const previewImage = style({
-  display: "block",
-  margin: "0 auto",
-  maxHeight: "20rem",
+  maxWidth: "100%",
+  maxHeight: "100%",
   objectFit: "contain",
 });
 

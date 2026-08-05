@@ -9,7 +9,9 @@ export const page = style({
 export const grid = style({
   display: "grid",
   gap: "1.5rem",
+  alignItems: "start",
   "@media": {
-    "(min-width: 1024px)": { gridTemplateColumns: "1fr 1fr" },
+    // 업로드 카드는 고정폭(이미지 20rem + 카드 패딩), 결과 카드가 나머지를 차지
+    "(min-width: 1024px)": { gridTemplateColumns: "23rem minmax(0, 1fr)" },
   },
 });

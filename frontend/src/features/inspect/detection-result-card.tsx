@@ -11,7 +11,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { DefectList } from "./defect-list";
 import * as styles from "./detection-result-card.css";
-import { PipelineViewer } from "./pipeline-viewer";
 
 interface DetectionResultCardProps {
   result: DetectionResponse | null;
@@ -42,7 +41,6 @@ function ResultPending() {
   return (
     <div className={styles.pending} aria-busy>
       <Skeleton className={styles.pendingImage} />
-      <Skeleton className={styles.pendingBar} />
       <p className={styles.pendingText}>AI가 결함을 분석하고 있습니다…</p>
     </div>
   );
@@ -67,11 +65,14 @@ function ResultContent({ result }: { result: DetectionResponse }) {
           className={styles.image}
         />
       </div>
-      <DefectList defects={result.defects} />
-      <PipelineViewer
-        pipeline={result.pipeline}
-        detectedImageUrl={result.detected_image_url}
-      />
+      <aside className={styles.defectPanel}>
+        <h3 className={styles.defectPanelTitle}>
+          검출된 결함 {result.defects.length > 0 && `(${result.defects.length})`}
+        </h3>
+        <div className={styles.defectPanelScroll}>
+          <DefectList defects={result.defects} />
+        </div>
+      </aside>
     </div>
   );
 }
