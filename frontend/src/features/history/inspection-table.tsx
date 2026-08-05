@@ -5,6 +5,14 @@ import { ResultBadge } from "@/components/result-badge";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -54,19 +62,7 @@ function InspectionRow({ inspection }: { inspection: Inspection }) {
   return (
     <TableRow>
       <TableCell>
-        <a
-          href={inspection.detected_image_path}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="결과 이미지 원본 보기"
-        >
-          <img
-            src={inspection.detected_image_path}
-            alt=""
-            loading="lazy"
-            className={styles.thumbnail}
-          />
-        </a>
+        <ImagePreview inspection={inspection} />
       </TableCell>
       <TableCell className={styles.timeCell}>
         {formatDateTime(inspection.inspection_time)}
@@ -78,6 +74,42 @@ function InspectionRow({ inspection }: { inspection: Inspection }) {
         <DefectSummary inspection={inspection} />
       </TableCell>
     </TableRow>
+  );
+}
+
+/** 썸네일 클릭 → 결과 이미지 확대 미리보기 (X 버튼/ESC/바깥 클릭으로 닫힘) */
+function ImagePreview({ inspection }: { inspection: Inspection }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className={styles.thumbnailButton}
+          aria-label="결과 이미지 크게 보기"
+        >
+          <img
+            src={inspection.detected_image_path}
+            alt=""
+            loading="lazy"
+            className={styles.thumbnail}
+          />
+        </button>
+      </DialogTrigger>
+      <DialogContent style={{ maxWidth: "min(56rem, 92vw)" }}>
+        <DialogHeader>
+          <DialogTitle>검사 결과 이미지</DialogTitle>
+          <DialogDescription>
+            {formatDateTime(inspection.inspection_time)} · 검출된 결함{" "}
+            {inspection.defects.length}건
+          </DialogDescription>
+        </DialogHeader>
+        <img
+          src={inspection.detected_image_path}
+          alt="결함 위치가 표시된 검사 결과 이미지 (확대)"
+          className={styles.previewImage}
+        />
+      </DialogContent>
+    </Dialog>
   );
 }
 

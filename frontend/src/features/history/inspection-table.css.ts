@@ -39,6 +39,14 @@ export const emptyText = style({
   fontSize: font.sm,
 });
 
+export const thumbnailButton = style({
+  padding: 0,
+  border: "none",
+  background: "none",
+  cursor: "zoom-in",
+  display: "block",
+});
+
 export const thumbnail = style({
   height: "3rem",
   width: "4rem",
@@ -47,8 +55,18 @@ export const thumbnail = style({
   objectFit: "cover",
   transition: "transform 150ms",
   selectors: {
-    "&:hover": { transform: "scale(1.05)" },
+    [`${thumbnailButton}:hover &`]: { transform: "scale(1.05)" },
   },
+});
+
+/* 미리보기 다이얼로그 */
+export const previewImage = style({
+  width: "100%",
+  maxHeight: "72vh",
+  objectFit: "contain",
+  borderRadius: `calc(${vars.radius} - 2px)`,
+  border: `1px solid ${vars.border}`,
+  backgroundColor: `color-mix(in oklab, ${vars.muted} 30%, transparent)`,
 });
 
 export const timeCell = style({
