@@ -115,7 +115,7 @@ function ImagePreview({ inspection }: { inspection: Inspection }) {
             checked={showAnnotations}
             onCheckedChange={setShowAnnotations}
           />
-          <Label htmlFor={switchId}>결함 표시 (annotation)</Label>
+          <Label htmlFor={switchId}>Show Annotations</Label>
         </div>
         <img
           src={

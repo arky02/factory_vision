@@ -26,7 +26,7 @@ export function PipelineCard({ result }: { result: DetectionResponse | null }) {
         aria-expanded={open}
       >
         <span className={styles.headerText}>
-          <span className={styles.headerTitle}>이미지 처리 과정 확인</span>
+          <span className={styles.headerTitle}>이미지 처리 과정 보기</span>
           <span className={styles.headerDescription}>
             OpenCV 전처리 → YOLO 검출 단계별 이미지
           </span>
