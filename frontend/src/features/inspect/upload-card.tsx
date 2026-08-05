@@ -1,4 +1,4 @@
-import { Loader2, ScanSearch, X } from "lucide-react";
+import { Loader2, RotateCcw, ScanSearch, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +53,7 @@ export function UploadCard({ file, onSelect, onSubmit, isPending }: UploadCardPr
           <UploadDropzone onSelect={onSelect} />
         )}
       </CardContent>
-      <CardFooter>
+      <CardFooter className={styles.footer}>
         <Button
           className={styles.submitButton}
           size="lg"
@@ -71,6 +71,15 @@ export function UploadCard({ file, onSelect, onSubmit, isPending }: UploadCardPr
               검사 시작
             </>
           )}
+        </Button>
+        <Button
+          variant="outline"
+          className={styles.submitButton}
+          onClick={() => onSelect(null)}
+          disabled={!file || isPending}
+        >
+          <RotateCcw size={14} aria-hidden />
+          이미지 초기화
         </Button>
       </CardFooter>
     </Card>

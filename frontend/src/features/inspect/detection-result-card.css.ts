@@ -3,12 +3,12 @@ import { style } from "@vanilla-extract/css";
 import { font, vars } from "../../styles/theme.css";
 
 export const header = style({
+  display: "flex",
   flexDirection: "row",
   alignItems: "center",
-  justifyContent: "space-between",
+  gap: "1rem",
 });
 
-/* 좌: 결과 이미지 / 우: 결함 목록 — 높이 고정으로 layout shift 방지 */
 export const content = style({
   display: "grid",
   gap: "1rem",

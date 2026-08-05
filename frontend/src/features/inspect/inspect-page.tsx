@@ -31,12 +31,14 @@ export function InspectPage() {
             onSubmit={() => file && detect.mutate(file)}
             isPending={detect.isPending}
           />
-          <DetectionResultCard
-            result={detect.data ?? null}
-            isPending={detect.isPending}
-          />
+          <div className={styles.rightColumn}>
+            <DetectionResultCard
+              result={detect.data ?? null}
+              isPending={detect.isPending}
+            />
+            <PipelineCard result={detect.data ?? null} />
+          </div>
         </div>
-        <PipelineCard result={detect.data ?? null} />
         <SampleGallery onPick={handleSelect} disabled={detect.isPending} />
       </div>
     </>

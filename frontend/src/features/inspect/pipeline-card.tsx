@@ -1,14 +1,9 @@
-import { ArrowRight, Workflow } from "lucide-react";
-import { Fragment } from "react";
+import { ArrowRight, ChevronDown, Workflow } from "lucide-react";
+import { Fragment, useState } from "react";
 
 import type { DetectionResponse } from "@/api/types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import * as styles from "./pipeline-card.css";
 
 /** 단계 키 → 화면 표기 (새 전처리 단계가 추가되면 여기에 매핑만 추가) */
@@ -18,19 +13,36 @@ const STAGE_LABELS: Record<string, { title: string; description: string }> = {
   denoise: { title: "Denoise", description: "가우시안 노이즈 제거" },
 };
 
-/** OpenCV 전처리 → YOLO 검출까지의 이미지 처리 과정 시각화 */
+/** OpenCV 전처리 → YOLO 검출까지의 이미지 처리 과정 (기본 접힘) */
 export function PipelineCard({ result }: { result: DetectionResponse | null }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>이미지 처리 과정</CardTitle>
-        <CardDescription>
-          업로드된 이미지는 OpenCV 전처리를 거친 뒤 YOLO 모델에 입력됩니다.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {result ? <PipelineTrack result={result} /> : <PipelinePlaceholder />}
-      </CardContent>
+    <Card className={styles.card}>
+      <button
+        type="button"
+        className={styles.headerToggle}
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+      >
+        <span className={styles.headerText}>
+          <span className={styles.headerTitle}>이미지 처리 과정</span>
+          <span className={styles.headerDescription}>
+            OpenCV 전처리 → YOLO 검출 단계별 이미지
+          </span>
+        </span>
+        <ChevronDown
+          size={16}
+          className={cn(styles.chevron, open && styles.chevronOpen)}
+          aria-hidden
+        />
+      </button>
+
+      {open && (
+        <CardContent className={styles.content}>
+          {result ? <PipelineTrack result={result} /> : <PipelinePlaceholder />}
+        </CardContent>
+      )}
     </Card>
   );
 }

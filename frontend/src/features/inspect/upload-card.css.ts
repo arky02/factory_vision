@@ -51,6 +51,11 @@ export const fileName = style({
   whiteSpace: "nowrap",
 });
 
+export const footer = style({
+  flexDirection: "column",
+  gap: "0.5rem",
+});
+
 export const submitButton = style({
   width: "100%",
 });

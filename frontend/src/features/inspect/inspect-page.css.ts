@@ -15,3 +15,11 @@ export const grid = style({
     "(min-width: 1024px)": { gridTemplateColumns: "23rem minmax(0, 1fr)" },
   },
 });
+
+/* 검사 결과 + 이미지 처리 과정을 세로로 쌓는 우측 컬럼 */
+export const rightColumn = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1.5rem",
+  minWidth: 0,
+});
