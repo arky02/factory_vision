@@ -17,8 +17,8 @@ export function StatCards({ inspections }: { inspections: Inspection[] }) {
 
   const stats = [
     { label: "검사 건수", value: String(total), icon: Gauge },
-    { label: "정상 (PASS)", value: String(total - ngCount), icon: CircleCheck },
-    { label: "불량 (FAIL)", value: String(ngCount), icon: CircleX },
+    { label: "정상", value: String(total - ngCount), icon: CircleCheck },
+    { label: "불량", value: String(ngCount), icon: CircleX },
     {
       label: "불량률",
       value: formatPercent(defectRate),

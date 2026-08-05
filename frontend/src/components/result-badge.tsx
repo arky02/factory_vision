@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import * as styles from "./result-badge.css";
 
-/** PASS(OK) / FAIL(NG) 판정 뱃지 */
+/** 검사 판정 뱃지 — OK: 정상 / NG: 불량 검출 */
 export function ResultBadge({
   result,
   className,
@@ -12,7 +12,7 @@ export function ResultBadge({
 }) {
   return (
     <Badge className={cn(styles.badge[result], className)}>
-      {result === "OK" ? "PASS" : "FAIL"}
+      {result === "OK" ? "정상" : "불량 검출"}
     </Badge>
   );
 }
