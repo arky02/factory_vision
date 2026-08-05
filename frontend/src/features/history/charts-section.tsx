@@ -30,7 +30,7 @@ export function ChartsSection({ distribution }: { distribution: DefectShare[] })
         <CardTitle>결함 유형 분포</CardTitle>
         <CardDescription>최근 24시간 · 검출된 결함 수 기준</CardDescription>
       </CardHeader>
-      <CardContent className={styles.contentFill}>
+      <CardContent>
         <DefectDistributionChart distribution={distribution} />
       </CardContent>
     </Card>

@@ -7,11 +7,7 @@ export const grid = style({
   gap: "0.75rem",
   gridTemplateColumns: "repeat(2, 1fr)",
   "@media": {
-    // 데스크톱: 고정 크기 2×2 블록 (우측 차트가 이 높이에 맞춰짐)
-    "(min-width: 1024px)": {
-      gridTemplateColumns: "repeat(2, 11rem)",
-      gridAutoRows: "6.5rem",
-    },
+    "(min-width: 1024px)": { gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem" },
   },
 });
 
@@ -23,7 +19,6 @@ export const cardBody = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  height: "100%",
 });
 
 export const statText = style({
