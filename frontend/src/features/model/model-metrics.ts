@@ -5,7 +5,7 @@
  */
 export const MODEL_METRICS = {
   model: "YOLO11n fine-tuned",
-  dataset: "HRIPCB (PCB 불량 6클래스)",
+  dataset: "HRIPCB (PCB 결함 6클래스)",
   trainImages: 5355,
   valImages: 2616,
   evaluatedAt: "2026-08-05",

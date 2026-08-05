@@ -42,7 +42,7 @@ function ResultPending() {
     <div className={styles.pending} aria-busy>
       <Skeleton className={styles.pendingImage} />
       <Skeleton className={styles.pendingBar} />
-      <p className={styles.pendingText}>AI가 불량을 분석하고 있습니다…</p>
+      <p className={styles.pendingText}>AI가 결함을 분석하고 있습니다…</p>
     </div>
   );
 }
@@ -62,7 +62,7 @@ function ResultContent({ result }: { result: DetectionResponse }) {
       <div className={styles.imageFrame}>
         <img
           src={result.detected_image_url}
-          alt="불량 위치가 표시된 검사 결과 이미지"
+          alt="결함 위치가 표시된 검사 결과 이미지"
           className={styles.image}
         />
       </div>

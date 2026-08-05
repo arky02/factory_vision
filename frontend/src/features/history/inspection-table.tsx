@@ -36,7 +36,7 @@ export function InspectionTable({ inspections }: { inspections: Inspection[] }) 
               <TableHead className={styles.colImage}>결과 이미지</TableHead>
               <TableHead className={styles.colTime}>검사 시각</TableHead>
               <TableHead className={styles.colResult}>판정</TableHead>
-              <TableHead>검출된 불량</TableHead>
+              <TableHead>검출된 결함</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

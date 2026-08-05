@@ -41,7 +41,7 @@ export function SampleGallery({ onPick, disabled }: SampleGalleryProps) {
       <CardHeader>
         <CardTitle>샘플 테스트</CardTitle>
         <CardDescription>
-          샘플 이미지로 테스트 해볼 수 있습니다. 하단 텍스트는 해당 샘플에서 검출되어야 하는 불량 라벨입니다.
+          샘플 이미지로 테스트 해볼 수 있습니다. 하단 텍스트는 해당 샘플에서 검출되어야 하는 결함 라벨입니다.
         </CardDescription>
       </CardHeader>
       <CardContent>

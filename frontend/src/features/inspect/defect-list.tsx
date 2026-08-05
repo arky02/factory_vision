@@ -10,13 +10,13 @@ export function DefectList({ defects }: { defects: Defect[] }) {
     return (
       <div className={styles.cleanNotice}>
         <CheckCircle2 size={16} aria-hidden />
-        불량이 검출되지 않았습니다.
+        결함이 검출되지 않았습니다.
       </div>
     );
   }
 
   return (
-    <ul className={styles.list} aria-label="검출된 불량 목록">
+    <ul className={styles.list} aria-label="검출된 결함 목록">
       {defects.map((defect, i) => (
         <li key={i} className={styles.item}>
           <Badge variant="secondary">{defect.type}</Badge>

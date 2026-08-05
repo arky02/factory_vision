@@ -9,7 +9,7 @@ export function LivePage() {
     <>
       <PageHeader
         title="실시간 검사"
-        description="웹캠으로 1초 간격 실시간 불량 검출"
+        description="웹캠으로 1초 간격 실시간 결함 검출"
       />
       <Card>
         <CardContent className={styles.placeholder}>

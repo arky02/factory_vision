@@ -49,7 +49,7 @@ export function StatCards({ inspections }: { inspections: Inspection[] }) {
       {topDefect && (
         <Card className={styles.topDefectCard}>
           <CardContent className={styles.topDefectBody}>
-            <span className={styles.topDefectLabel}>최다 발생 불량</span>
+            <span className={styles.topDefectLabel}>최다 발생 결함</span>
             <span className={styles.topDefectValue}>
               {topDefect.type}{" "}
               <span className={styles.topDefectCount}>({topDefect.count}건)</span>
