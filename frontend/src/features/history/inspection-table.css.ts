@@ -60,6 +60,12 @@ export const thumbnail = style({
 });
 
 /* 미리보기 다이얼로그 */
+export const previewControls = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "0.5rem",
+});
+
 export const previewImage = style({
   width: "100%",
   maxHeight: "72vh",

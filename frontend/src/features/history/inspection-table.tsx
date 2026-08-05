@@ -1,4 +1,5 @@
 import { Inbox } from "lucide-react";
+import { useState } from "react";
 
 import type { Inspection } from "@/api/types";
 import { ResultBadge } from "@/components/result-badge";
@@ -12,6 +13,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -79,8 +82,11 @@ function InspectionRow({ inspection }: { inspection: Inspection }) {
 
 /** 썸네일 클릭 → 결과 이미지 확대 미리보기 (X 버튼/ESC/바깥 클릭으로 닫힘) */
 function ImagePreview({ inspection }: { inspection: Inspection }) {
+  const [showAnnotations, setShowAnnotations] = useState(true);
+  const switchId = `annotations-${inspection.id}`;
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setShowAnnotations(true)}>
       <DialogTrigger asChild>
         <button
           type="button"
@@ -103,9 +109,25 @@ function ImagePreview({ inspection }: { inspection: Inspection }) {
             {inspection.defects.length}건
           </DialogDescription>
         </DialogHeader>
+        <div className={styles.previewControls}>
+          <Switch
+            id={switchId}
+            checked={showAnnotations}
+            onCheckedChange={setShowAnnotations}
+          />
+          <Label htmlFor={switchId}>결함 표시 (annotation)</Label>
+        </div>
         <img
-          src={inspection.detected_image_path}
-          alt="결함 위치가 표시된 검사 결과 이미지 (확대)"
+          src={
+            showAnnotations
+              ? inspection.detected_image_path
+              : inspection.image_path
+          }
+          alt={
+            showAnnotations
+              ? "결함 위치가 표시된 검사 결과 이미지 (확대)"
+              : "원본 검사 이미지 (확대)"
+          }
           className={styles.previewImage}
         />
       </DialogContent>
