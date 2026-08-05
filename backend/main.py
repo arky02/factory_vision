@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 from database import Base, engine
 from models import inspection as _models  # 테이블 정의 등록  # noqa: F401
-from routers import detect, inspections
+from routers import detect, inspections, stats
 from services.inference import Detector
 
 BASE_DIR = Path(__file__).parent
@@ -40,6 +40,7 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 app.include_router(detect.router, prefix="/api")
 app.include_router(inspections.router, prefix="/api")
+app.include_router(stats.router, prefix="/api")
 
 
 @app.get("/api/health")

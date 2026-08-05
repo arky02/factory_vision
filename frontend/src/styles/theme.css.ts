@@ -29,6 +29,16 @@ export const statusColors = {
   warnDot: "oklch(79.5% 0.184 86.0)", // yellow-500
 } as const;
 
+/** 차트 전용 색 — dataviz 검증기 통과값 (흰 배경, CVD ΔE 23.8) */
+export const chartColors = {
+  ok: "#2a78d6", // 정상 (파랑)
+  ng: "#d03b3b", // 불량 (빨강) — 파랑↔빨강은 색각이상에도 안전한 대비쌍
+  bar: "#2a78d6", // 단일 계열 바
+  grid: "#e1e0d9",
+  axisInk: "#898781",
+  baseline: "#c3c2b7",
+} as const;
+
 export const font = {
   xs: "0.75rem",
   sm: "0.875rem",

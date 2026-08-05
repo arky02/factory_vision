@@ -27,6 +27,29 @@ export interface InspectionDefect {
   bbox: number[];
 }
 
+/** GET /stats/summary 응답 */
+export interface StatsSummary {
+  window_hours: number;
+  total: number;
+  ok: number;
+  ng: number;
+  defect_rate: number; // 0.0 ~ 1.0
+  top_defect: { type: string; count: number } | null;
+}
+
+/** GET /stats/hourly 응답의 시간 버킷 */
+export interface HourlyPoint {
+  hour: string; // ISO (UTC)
+  total: number;
+  ng: number;
+}
+
+/** GET /stats/defect-distribution 응답 항목 */
+export interface DefectShare {
+  type: string;
+  count: number;
+}
+
 /** GET /inspections 응답의 검사 이력 1건 */
 export interface Inspection {
   id: number;
