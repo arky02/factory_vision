@@ -4,16 +4,25 @@ import { font, vars } from "../../styles/theme.css";
 
 export const card = style({
   marginTop: "1.5rem",
+  height: "300px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+});
+
+export const contentFill = style({
+  flex: 1,
+  minHeight: 0,
 });
 
 export const chartBox = style({
   width: "100%",
-  height: "15rem",
+  height: "100%",
 });
 
 export const empty = style({
   display: "flex",
-  height: "15rem",
+  height: "100%",
   alignItems: "center",
   justifyContent: "center",
   fontSize: font.sm,
