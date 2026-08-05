@@ -45,9 +45,10 @@ export function HistoryPage() {
         </Button>
       </PageHeader>
 
-      <StatCards summary={summary} />
-
-      <ChartsSection distribution={distribution} />
+      <div className={styles.overview}>
+        <StatCards summary={summary} />
+        <ChartsSection distribution={distribution} />
+      </div>
 
       <section className={styles.tableSection} aria-label="최근 검사 목록">
         <h2 className={styles.tableTitle}>최근 검사 목록</h2>

@@ -14,14 +14,14 @@ export function StatCards({ summary }: { summary: StatsSummary }) {
 
   const stats = [
     { label: "검사 건수", value: String(summary.total), icon: Gauge },
-    { label: "정상", value: String(summary.ok), icon: CircleCheck },
-    { label: "불량", value: String(summary.ng), icon: CircleX },
     {
       label: "불량률",
       value: formatPercent(summary.defect_rate),
       icon: AlertTriangle,
       warn,
     },
+    { label: "정상", value: String(summary.ok), icon: CircleCheck },
+    { label: "불량", value: String(summary.ng), icon: CircleX },
   ];
 
   return (

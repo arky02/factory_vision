@@ -2,18 +2,29 @@ import { style } from "@vanilla-extract/css";
 
 import { font, vars } from "../../styles/theme.css";
 
+/* 좌측 통계 블록 높이에 맞춰 늘어나는 카드 */
 export const card = style({
-  marginTop: "1.5rem",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.75rem",
+});
+
+export const contentFill = style({
+  flex: 1,
+  minHeight: 0,
 });
 
 export const chartBox = style({
   width: "100%",
-  height: "15rem",
+  height: "100%",
+  minHeight: "10rem",
 });
 
 export const empty = style({
   display: "flex",
-  height: "15rem",
+  height: "100%",
+  minHeight: "10rem",
   alignItems: "center",
   justifyContent: "center",
   fontSize: font.sm,
