@@ -4,7 +4,6 @@ import { RotateCcw } from "lucide-react";
 import {
   defectDistributionQuery,
   inspectionsQuery,
-  statsHourlyQuery,
   statsSummaryQuery,
 } from "@/api/queries";
 import { PageHeader } from "@/components/page-header";
@@ -20,13 +19,11 @@ export function HistoryPage() {
   const [
     { data: inspections },
     { data: summary },
-    { data: hourly, isFetching },
-    { data: distribution },
+    { data: distribution, isFetching },
   ] = useSuspenseQueries({
     queries: [
       inspectionsQuery(100),
       statsSummaryQuery(),
-      statsHourlyQuery(),
       defectDistributionQuery(),
     ],
   });
@@ -50,7 +47,7 @@ export function HistoryPage() {
 
       <StatCards summary={summary} />
 
-      <ChartsSection hourly={hourly} distribution={distribution} />
+      <ChartsSection distribution={distribution} />
 
       <section className={styles.tableSection} aria-label="최근 검사 목록">
         <h2 className={styles.tableTitle}>최근 검사 목록</h2>

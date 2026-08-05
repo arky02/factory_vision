@@ -2,13 +2,8 @@ import { style } from "@vanilla-extract/css";
 
 import { font, vars } from "../../styles/theme.css";
 
-export const grid = style({
-  display: "grid",
-  gap: "1rem",
+export const card = style({
   marginTop: "1.5rem",
-  "@media": {
-    "(min-width: 1024px)": { gridTemplateColumns: "3fr 2fr" },
-  },
 });
 
 export const chartBox = style({
@@ -45,10 +40,4 @@ export const tooltipRow = style({
   alignItems: "center",
   gap: "0.375rem",
   color: vars.mutedForeground,
-});
-
-export const tooltipDot = style({
-  width: "0.5rem",
-  height: "0.5rem",
-  borderRadius: "9999px",
 });

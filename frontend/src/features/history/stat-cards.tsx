@@ -43,19 +43,6 @@ export function StatCards({ summary }: { summary: StatsSummary }) {
           </CardContent>
         </Card>
       ))}
-      {summary.top_defect && (
-        <Card className={styles.topDefectCard}>
-          <CardContent className={styles.topDefectBody}>
-            <span className={styles.topDefectLabel}>최다 발생 결함</span>
-            <span className={styles.topDefectValue}>
-              {summary.top_defect.type}{" "}
-              <span className={styles.topDefectCount}>
-                ({summary.top_defect.count}건)
-              </span>
-            </span>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
