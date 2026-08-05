@@ -28,7 +28,16 @@ async def detect(request: Request, file: UploadFile = File(...), db: Session = D
     detected_path = f"/static/detections/{image_id}.jpg"
     cv2.imwrite(str(STATIC_DIR / "uploads" / f"{image_id}.jpg"), image)
 
-    processed = preprocess.run(image)
+    # 전처리 단계별 중간 이미지를 저장해 파이프라인 시각화에 사용
+    stages = preprocess.run_with_stages(image)
+    (STATIC_DIR / "pipeline").mkdir(exist_ok=True)
+    pipeline = [{"name": "original", "url": upload_path}]
+    for i, (name, stage_image) in enumerate(stages):
+        stage_url = f"/static/pipeline/{image_id}_{i}_{name}.jpg"
+        cv2.imwrite(str(STATIC_DIR / "pipeline" / f"{image_id}_{i}_{name}.jpg"), stage_image)
+        pipeline.append({"name": name, "url": stage_url})
+
+    processed = stages[-1][1] if stages else image
     defects, plotted = request.app.state.detector.predict(processed)
     cv2.imwrite(str(STATIC_DIR / "detections" / f"{image_id}.jpg"), plotted)
 
@@ -49,4 +58,5 @@ async def detect(request: Request, file: UploadFile = File(...), db: Session = D
         confidence=max((d["confidence"] for d in defects), default=None),
         detected_image_url=detected_path,
         defects=defects,
+        pipeline=pipeline,
     )

@@ -11,6 +11,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { DefectList } from "./defect-list";
 import * as styles from "./detection-result-card.css";
+import { PipelineViewer } from "./pipeline-viewer";
 
 interface DetectionResultCardProps {
   result: DetectionResponse | null;
@@ -67,6 +68,10 @@ function ResultContent({ result }: { result: DetectionResponse }) {
         />
       </div>
       <DefectList defects={result.defects} />
+      <PipelineViewer
+        pipeline={result.pipeline}
+        detectedImageUrl={result.detected_image_url}
+      />
     </div>
   );
 }

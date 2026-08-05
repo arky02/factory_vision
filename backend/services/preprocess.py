@@ -29,3 +29,16 @@ def run(image: np.ndarray) -> np.ndarray:
     for step in PIPELINE:
         image = step(image)
     return image
+
+
+def run_with_stages(image: np.ndarray) -> list[tuple[str, np.ndarray]]:
+    """전처리를 수행하며 단계별 중간 결과를 함께 반환한다 (파이프라인 시각화용).
+
+    Returns:
+        [(단계 이름, 해당 단계 적용 후 이미지), ...]  — 마지막 항목이 최종 전처리 결과
+    """
+    stages = []
+    for step in PIPELINE:
+        image = step(image)
+        stages.append((step.__name__, image))
+    return stages

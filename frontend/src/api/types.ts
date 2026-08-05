@@ -5,12 +5,19 @@ export interface Defect {
   bbox: [number, number, number, number]; // [x1, y1, x2, y2]
 }
 
+/** 전처리 파이프라인 단계 이미지 */
+export interface PipelineStage {
+  name: string; // "original" | "clahe" | "denoise" 등
+  url: string;
+}
+
 /** POST /detect 응답 */
 export interface DetectionResponse {
   result: "OK" | "NG";
   confidence: number | null;
   detected_image_url: string;
   defects: Defect[];
+  pipeline: PipelineStage[];
 }
 
 /** GET /inspections 응답의 개별 불량 (DB 컬럼명 기준) */
