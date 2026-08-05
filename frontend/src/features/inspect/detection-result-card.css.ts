@@ -13,7 +13,7 @@ export const content = style({
   display: "grid",
   gap: "1rem",
   "@media": {
-    "(min-width: 640px)": { gridTemplateColumns: "minmax(0, 1fr) 16rem" },
+    "(min-width: 640px)": { gridTemplateColumns: "minmax(0, 1fr) 12.5rem" },
   },
 });
 

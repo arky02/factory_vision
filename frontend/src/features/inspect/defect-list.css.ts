@@ -26,35 +26,28 @@ export const item = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  gap: "0.5rem",
   borderRadius: `calc(${vars.radius} - 2px)`,
   border: `1px solid ${vars.border}`,
-  padding: "0.75rem",
+  padding: "0.5rem 0.625rem",
 });
 
-export const meterGroup = style({
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem",
+/* 확신도 원형 게이지 */
+export const ringTrack = style({
+  fill: "none",
+  stroke: vars.muted,
 });
 
-export const meterTrack = style({
-  height: "0.375rem",
-  width: "6rem",
-  overflow: "hidden",
-  borderRadius: "9999px",
-  backgroundColor: vars.muted,
+export const ringFill = style({
+  fill: "none",
+  stroke: vars.primary,
+  strokeLinecap: "round",
+  transition: "stroke-dasharray 300ms ease",
 });
 
-export const meterFill = style({
-  height: "100%",
-  borderRadius: "9999px",
-  backgroundColor: vars.primary,
-});
-
-export const meterValue = style({
-  width: "3rem",
-  textAlign: "right",
-  fontSize: font.xs,
+export const ringText = style({
+  fill: vars.foreground,
+  fontSize: "0.5rem",
+  fontWeight: 600,
   fontVariantNumeric: "tabular-nums",
-  color: vars.mutedForeground,
 });
