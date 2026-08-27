@@ -63,8 +63,6 @@ export function PipelineCard({ result }: { result: DetectionResponse | null }) {
 function PipelinePlaceholder() {
   return (
     <div className={styles.placeholder}>
-      <Workflow size={16} aria-hidden />
-      전처리 
       이미지 전처리 과정 미리보기
     </div>
   );
