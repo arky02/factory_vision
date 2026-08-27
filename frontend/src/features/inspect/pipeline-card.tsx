@@ -64,8 +64,7 @@ function PipelinePlaceholder() {
   return (
     <div className={styles.placeholder}>
       <Workflow size={16} aria-hidden />
-      
-      검사를 실행하면 단계별 처리 이미지가 표시됩니다.
+      검사를 시작하면 표시됩니다.
     </div>
   );
 }
