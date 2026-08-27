@@ -38,8 +38,13 @@ async def detect(request: Request, file: UploadFile = File(...), db: Session = D
         pipeline.append({"name": name, "url": stage_url})
 
     processed = stages[-1][1] if stages else image
-    defects, plotted = request.app.state.detector.predict(processed)
+    defects, plotted, outlined = request.app.state.detector.predict(processed)
     cv2.imwrite(str(STATIC_DIR / "detections" / f"{image_id}.jpg"), plotted)
+
+    # 파이프라인 마지막 단계 — 확대 시 라벨이 형상을 덮지 않도록 윤곽선만 그린 판을 쓴다
+    outline_url = f"/static/pipeline/{image_id}_detect.jpg"
+    cv2.imwrite(str(STATIC_DIR / "pipeline" / f"{image_id}_detect.jpg"), outlined)
+    pipeline.append({"name": "detect", "url": outline_url})
 
     inspection = Inspection(
         image_path=upload_path,
@@ -59,10 +64,13 @@ async def detect(request: Request, file: UploadFile = File(...), db: Session = D
     db.add(inspection)
     db.commit()
 
+    height, width = image.shape[:2]
     return DetectionResponse(
         result=inspection.inspection_result,
         confidence=max((d["confidence"] for d in defects), default=None),
         detected_image_url=detected_path,
         defects=defects,
         pipeline=pipeline,
+        image_width=width,
+        image_height=height,
     )

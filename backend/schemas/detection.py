@@ -22,6 +22,8 @@ class DetectionResponse(BaseModel):
     detected_image_url: str
     defects: list[Defect]
     pipeline: list[PipelineStage]  # 원본 → 전처리 단계별 이미지 (시각화용)
+    image_width: int  # 파이프라인 이미지를 결함 위치로 확대할 때 필요
+    image_height: int
 
 
 class DefectItem(BaseModel):

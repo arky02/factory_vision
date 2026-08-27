@@ -20,6 +20,8 @@ export interface DetectionResponse {
   detected_image_url: string;
   defects: Defect[];
   pipeline: PipelineStage[];
+  image_width: number; // 파이프라인 이미지를 결함 위치로 확대할 때 필요
+  image_height: number;
 }
 
 /** GET /inspections 응답의 개별 불량 (DB 컬럼명 기준) */

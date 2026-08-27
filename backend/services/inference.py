@@ -33,12 +33,15 @@ MEASURE_CONF = 0.10
 FONT = cv2.FONT_HERSHEY_DUPLEX
 
 
-def _render(image: np.ndarray, defects: list[dict]) -> np.ndarray:
+def _render(image: np.ndarray, defects: list[dict], labels: bool = True) -> np.ndarray:
     """검출 결과를 이미지에 그린다.
 
     Ultralytics의 result.plot()은 라벨 상자가 결함보다 커서 작은 결함의 형상을 가린다.
     PCB 결함은 수십 픽셀 수준이므로 윤곽선을 직접 그리고 라벨은 최소로 유지한다.
     업로드 해상도가 제각각이므로 선·글자 굵기는 이미지 크기에 비례시킨다.
+
+    labels=False는 파이프라인 시각화용이다. 결함 부위를 확대해 보면 라벨이 함께
+    확대되어 형상을 덮으므로, 그 화면에서는 윤곽선만 그린다.
     """
     out = image.copy()
     overlay = image.copy()
@@ -65,6 +68,9 @@ def _render(image: np.ndarray, defects: list[dict]) -> np.ndarray:
             cv2.rectangle(out, (x1, y1), (x2, y2), color, line_thick)
             box = (x1, y1, x2, y2)
         shapes.append((d["type"], color, box))
+
+    if not labels:
+        return cv2.addWeighted(overlay, MASK_ALPHA, out, 1 - MASK_ALPHA, 0)
 
     # 2단계: 라벨을 배치한다. 결함 도형과 이미 놓인 라벨을 모두 피한다.
     #        (녹색 기판 위에서는 글자만으로 읽기 어려워 배경을 채운 칩으로 그린다)
@@ -159,7 +165,8 @@ class Detector:
         Returns:
             defects: [{"type", "confidence", "bbox", "polygon", "area_px"}, ...]
                      polygon·area_px는 계측 모델이 대응 인스턴스를 찾은 경우에만 채워진다.
-            plotted: 검출 결과가 그려진 BGR 이미지
+            plotted: 검출 결과(윤곽선 + 라벨)가 그려진 BGR 이미지
+            outlined: 라벨 없이 윤곽선만 그린 이미지 (파이프라인 확대 보기용)
         """
         result = self.model.predict(image, conf=conf, verbose=False)[0]
         own_outlines = result.masks.xy if result.masks is not None else None
@@ -190,4 +197,5 @@ class Detector:
                 "area_px": area_px,
             })
 
-        return defects, _render(image, defects)
+        # 두 번째는 파이프라인 확대 보기용 (라벨 없이 윤곽선만)
+        return defects, _render(image, defects), _render(image, defects, labels=False)
