@@ -33,7 +33,7 @@ export interface InspectionDefect {
 
 /** GET /stats/summary 응답 */
 export interface StatsSummary {
-  window_hours: number;
+  window_hours: number | null; // null이면 전체 기간
   total: number;
   ok: number;
   ng: number;

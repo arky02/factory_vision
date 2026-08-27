@@ -37,7 +37,7 @@ export function HistoryPage() {
     <>
       <PageHeader
         title="검사 이력"
-        description="최근 24시간 검사 현황 요약과 검사 목록"
+        description="전체 검사 현황 요약과 검사 목록"
       >
         <Button variant="outline" size="sm" onClick={refresh} disabled={isFetching}>
           <RotateCcw size={14} aria-hidden />

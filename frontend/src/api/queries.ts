@@ -20,23 +20,26 @@ export const inspectionsQuery = (limit = 50) =>
     queryFn: () => getJson<Inspection[]>(`/api/inspections?limit=${limit}`),
   });
 
-export const statsSummaryQuery = (hours = 24) =>
+/** hours를 생략하면 전체 기간을 집계한다 (데모 환경에서는 이쪽이 기본) */
+const windowParam = (hours?: number) => (hours === undefined ? "" : `?hours=${hours}`);
+
+export const statsSummaryQuery = (hours?: number) =>
   queryOptions({
-    queryKey: ["stats", "summary", hours] as const,
-    queryFn: () => getJson<StatsSummary>(`/api/stats/summary?hours=${hours}`),
+    queryKey: ["stats", "summary", hours ?? "all"] as const,
+    queryFn: () => getJson<StatsSummary>(`/api/stats/summary${windowParam(hours)}`),
   });
 
-export const statsHourlyQuery = (hours = 24) =>
+export const statsHourlyQuery = (hours?: number) =>
   queryOptions({
-    queryKey: ["stats", "hourly", hours] as const,
-    queryFn: () => getJson<HourlyPoint[]>(`/api/stats/hourly?hours=${hours}`),
+    queryKey: ["stats", "hourly", hours ?? "all"] as const,
+    queryFn: () => getJson<HourlyPoint[]>(`/api/stats/hourly${windowParam(hours)}`),
   });
 
-export const defectDistributionQuery = (hours = 24) =>
+export const defectDistributionQuery = (hours?: number) =>
   queryOptions({
-    queryKey: ["stats", "distribution", hours] as const,
+    queryKey: ["stats", "distribution", hours ?? "all"] as const,
     queryFn: () =>
-      getJson<DefectShare[]>(`/api/stats/defect-distribution?hours=${hours}`),
+      getJson<DefectShare[]>(`/api/stats/defect-distribution${windowParam(hours)}`),
   });
 
 export const healthQuery = queryOptions({

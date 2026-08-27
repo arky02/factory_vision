@@ -7,7 +7,7 @@ class TopDefect(BaseModel):
 
 
 class StatsSummary(BaseModel):
-    window_hours: int
+    window_hours: int | None  # None이면 전체 기간
     total: int
     ok: int
     ng: int
