@@ -51,7 +51,7 @@ function ResultEmpty() {
   return (
     <div className={styles.empty}>
       <Microscope size={32} aria-hidden />
-      <p className={styles.emptyText}>이미지를 업로드하고 검사를 시작하세요.</p>
+      <p className={styles.emptyText}>이미지를 업로드해 주세요.</p>
     </div>
   );
 }

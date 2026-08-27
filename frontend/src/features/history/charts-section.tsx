@@ -28,7 +28,7 @@ export function ChartsSection({ distribution }: { distribution: DefectShare[] })
     <Card className={styles.card}>
       <CardHeader>
         <CardTitle>결함 유형 분포</CardTitle>
-        <CardDescription>전체 기간 · 검출된 결함 수 기준</CardDescription>
+        <CardDescription>전체 기간 / 검출된 결함 수 기준</CardDescription>
       </CardHeader>
       <CardContent className={styles.contentFill}>
         <DefectDistributionChart distribution={distribution} />
