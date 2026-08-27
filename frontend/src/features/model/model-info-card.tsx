@@ -18,7 +18,7 @@ export function ModelInfoCard() {
         <CardDescription>
           {m.dataset} · 학습 {m.trainImages.toLocaleString()}장 / 검증{" "}
           {m.valImages.toLocaleString()}장(결함 {m.valInstances.toLocaleString()}
-          개) 기준 실측 ({m.evaluatedAt})
+          개) 기준 실측 
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -27,7 +27,7 @@ export function ModelInfoCard() {
           <ModelBlock metrics={m.segment} primary="Mask mAP50" />
         </div>
 
-        <p className={styles.note}>기준 라벨이 달라 두 수치는 직접 비교할 수 없습니다.</p>
+        <p className={styles.note}></p>
 
         <div className={styles.layout}>
           <section>
@@ -60,7 +60,7 @@ export function ModelInfoCard() {
               loading="lazy"
               className={styles.matrixImage}
             />
-            <figcaption className={styles.caption}>대각선이 진할수록 정확</figcaption>
+            
           </figure>
         </div>
       </CardContent>

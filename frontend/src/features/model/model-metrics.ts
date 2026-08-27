@@ -19,7 +19,7 @@ export const MODEL_METRICS = {
   detect: {
     model: "YOLO11n",
     role: "판정",
-    basis: "원본 어노테이션 기준",
+    basis: "원본 Annotation 기준",
     map50: 0.9849,
     map5095: 0.5525,
     precision: 0.9761,

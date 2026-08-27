@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,63 +24,58 @@ export function UploadCard({ file, onSelect, onSubmit, isPending }: UploadCardPr
   return (
     <Card>
       <CardHeader>
-        <CardTitle>이미지 업로드</CardTitle>
+        <CardTitle className={styles.titleRow}>
+          이미지 업로드
+          {file && <span className={styles.fileName}>{file.name}</span>}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className={styles.body}>
         {previewUrl ? (
-          <div className={styles.preview}>
-            <div className={styles.previewFrame}>
-              <img
-                src={previewUrl}
-                alt="업로드한 검사 대상 이미지 미리보기"
-                className={styles.previewImage}
-              />
-              <Button
-                variant="secondary"
-                size="icon"
-                className={styles.removeButton}
-                onClick={() => onSelect(null)}
-                disabled={isPending}
-                aria-label="선택한 이미지 제거"
-              >
-                <X size={16} />
-              </Button>
-            </div>
-            <p className={styles.fileName}>{file?.name}</p>
+          <div className={styles.previewFrame}>
+            <img
+              src={previewUrl}
+              alt="업로드한 검사 대상 이미지 미리보기"
+              className={styles.previewImage}
+            />
+            <Button
+              variant="secondary"
+              size="icon"
+              className={styles.removeButton}
+              onClick={() => onSelect(null)}
+              disabled={isPending}
+              aria-label="선택한 이미지 제거"
+            >
+              <X size={16} />
+            </Button>
           </div>
         ) : (
           <UploadDropzone onSelect={onSelect} />
         )}
+
+        <div className={styles.actions}>
+          <Button size="lg" onClick={onSubmit} disabled={!file || isPending}>
+            {isPending ? (
+              <>
+                <Loader2 size={16} className={styles.spinner} aria-hidden />
+                검사 중…
+              </>
+            ) : (
+              <>
+                <ScanSearch size={16} aria-hidden />
+                검사 시작
+              </>
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => onSelect(null)}
+            disabled={!file || isPending}
+          >
+            <RotateCcw size={14} aria-hidden />
+            이미지 초기화
+          </Button>
+        </div>
       </CardContent>
-      <CardFooter className={styles.footer}>
-        <Button
-          className={styles.submitButton}
-          size="lg"
-          onClick={onSubmit}
-          disabled={!file || isPending}
-        >
-          {isPending ? (
-            <>
-              <Loader2 size={16} className={styles.spinner} aria-hidden />
-              검사 중…
-            </>
-          ) : (
-            <>
-              <ScanSearch size={16} aria-hidden />
-              검사 시작
-            </>
-          )}
-        </Button>
-        <Button
-          variant="outline"
-          className={styles.submitButton}
-          onClick={() => onSelect(null)}
-          disabled={!file || isPending}
-        >
-          <RotateCcw size={14} aria-hidden />
-          이미지 초기화
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

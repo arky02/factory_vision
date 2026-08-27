@@ -11,10 +11,24 @@ export const spinner = style({
   animation: `${spin} 1s linear infinite`,
 });
 
-export const preview = style({
+/* 미리보기와 버튼 사이 간격 — 카드 기본 간격(1.5rem)보다 좁게 붙인다 */
+export const body = style({
   display: "flex",
   flexDirection: "column",
   gap: "0.75rem",
+});
+
+export const actions = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.5rem",
+});
+
+export const titleRow = style({
+  display: "flex",
+  alignItems: "baseline",
+  gap: "0.5rem",
+  minWidth: 0,
 });
 
 export const previewFrame = style({
@@ -44,18 +58,11 @@ export const removeButton = style({
 });
 
 export const fileName = style({
+  minWidth: 0,
   fontSize: font.xs,
+  fontWeight: 400,
   color: vars.mutedForeground,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-});
-
-export const footer = style({
-  flexDirection: "column",
-  gap: "0.5rem",
-});
-
-export const submitButton = style({
-  width: "100%",
 });
