@@ -7,7 +7,6 @@ import { Toaster } from "sonner";
 import { AppLayout } from "@/components/layout/app-layout";
 import { HistoryPage } from "@/features/history/history-page";
 import { InspectPage } from "@/features/inspect/inspect-page";
-import { LivePage } from "@/features/live/live-page";
 import { ModelPage } from "@/features/model/model-page";
 
 import "./index.css";
@@ -27,7 +26,7 @@ const router = createBrowserRouter([
       { path: "/history", element: <HistoryPage /> },
       { path: "/model", element: <ModelPage /> },
       { path: "/dashboard", element: <Navigate to="/history" replace /> },
-      { path: "/live", element: <LivePage /> },
+      { path: "*", element: <Navigate to="/inspect" replace /> },
     ],
   },
 ]);
