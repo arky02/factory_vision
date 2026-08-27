@@ -44,31 +44,65 @@ def _render(image: np.ndarray, defects: list[dict]) -> np.ndarray:
     overlay = image.copy()
     h, w = image.shape[:2]
 
-    scale = max(0.55, min(h, w) / 900)
-    text_thick = max(2, round(scale * 2.2))
-    line_thick = max(2, round(scale * 2.5))
-    pad = round(6 * scale)
+    scale = max(0.6, min(h, w) / 750)
+    text_thick = max(1, round(scale))
+    line_thick = max(2, round(scale * 2))
+    pad = round(5 * scale)
+    gap = round(4 * scale)
 
+    # 1단계: 도형을 그리고 각 결함의 외곽 사각형을 모아둔다
+    shapes = []
     for d in defects:
         color = CLASS_COLORS.get(d["type"], DEFAULT_COLOR)
         if d["polygon"]:
             pts = np.array(d["polygon"], np.int32)
             cv2.fillPoly(overlay, [pts], color)
             cv2.polylines(out, [pts], True, color, line_thick, cv2.LINE_AA)
-            x, top, bottom = int(pts[:, 0].min()), int(pts[:, 1].min()), int(pts[:, 1].max())
+            box = (int(pts[:, 0].min()), int(pts[:, 1].min()),
+                   int(pts[:, 0].max()), int(pts[:, 1].max()))
         else:  # 계측 모델이 대응 인스턴스를 찾지 못한 경우 — 사각형으로 표시
             x1, y1, x2, y2 = d["bbox"]
             cv2.rectangle(out, (x1, y1), (x2, y2), color, line_thick)
-            x, top, bottom = x1, y1, y2
+            box = (x1, y1, x2, y2)
+        shapes.append((d["type"], color, box))
 
-        label = d["type"]
-        (tw, th), _ = cv2.getTextSize(label, FONT, scale, text_thick)
-        # 위쪽에 자리가 없으면 도형 아래에 그린다. 오른쪽으로 넘치면 안쪽으로 당긴다.
-        ty = top - pad if top - th - pad >= 0 else bottom + th + pad
-        tx = min(max(0, x), max(0, w - tw))
+    # 2단계: 라벨을 배치한다. 결함 도형과 이미 놓인 라벨을 모두 피한다.
+    #        (녹색 기판 위에서는 글자만으로 읽기 어려워 배경을 채운 칩으로 그린다)
+    occupied = [b for _, _, b in shapes]
 
-        cv2.putText(out, label, (tx, ty), FONT, scale, (0, 0, 0), text_thick + 3, cv2.LINE_AA)
-        cv2.putText(out, label, (tx, ty), FONT, scale, color, text_thick, cv2.LINE_AA)
+    def free(rect):
+        ax1, ay1, ax2, ay2 = rect
+        return not any(ax1 < bx2 and bx1 < ax2 and ay1 < by2 and by1 < ay2
+                       for bx1, by1, bx2, by2 in occupied)
+
+    for label, color, (x1, y1, x2, y2) in shapes:
+        (tw, th), base = cv2.getTextSize(label, FONT, scale, text_thick)
+        box_w, box_h = tw + pad * 2, th + base + pad * 2
+        step = box_h + gap
+
+        # 도형 위를 우선하고, 막히면 아래·좌우로 넓혀가며 빈 자리를 찾는다
+        spots = []
+        for k in range(6):
+            for bx in (min(max(0, x1), max(0, w - box_w)),
+                       min(max(0, x2 + gap), max(0, w - box_w)),
+                       min(max(0, x1 - box_w - gap), max(0, w - box_w))):
+                spots.append((bx, y1 - gap - box_h - k * step))
+                spots.append((bx, y2 + gap + k * step))
+        fallback = (min(max(0, x1), max(0, w - box_w)),
+                    max(0, min(y1 - gap - box_h, h - box_h)))
+        bx, by = next(
+            ((sx, sy) for sx, sy in spots
+             if 0 <= sy <= h - box_h and free((sx, sy, sx + box_w, sy + box_h))),
+            fallback,
+        )
+        occupied.append((bx, by, bx + box_w, by + box_h))
+
+        cv2.rectangle(out, (bx, by), (bx + box_w, by + box_h), color, -1)
+        # 배경이 밝으면 검은 글자, 어두우면 흰 글자 (BGR 가중 휘도)
+        lum = 0.114 * color[0] + 0.587 * color[1] + 0.299 * color[2]
+        ink = (0, 0, 0) if lum > 140 else (255, 255, 255)
+        cv2.putText(out, label, (bx + pad, by + box_h - pad - base // 2),
+                    FONT, scale, ink, text_thick, cv2.LINE_AA)
 
     return cv2.addWeighted(overlay, MASK_ALPHA, out, 1 - MASK_ALPHA, 0)
 
