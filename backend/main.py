@@ -12,8 +12,9 @@ from services.inference import Detector
 
 BASE_DIR = Path(__file__).parent
 WEIGHTS_DIR = BASE_DIR / "yolo" / "weights"
-# 세그멘테이션 가중치를 우선 사용한다 (결함 면적 계측 지원). 없으면 검출 전용으로 폴백.
-WEIGHTS_CANDIDATES = [WEIGHTS_DIR / "best-seg.pt", WEIGHTS_DIR / "best.pt"]
+# 판정은 검출 전용 모델이, 면적 계측은 세그멘테이션 모델이 담당한다 (services/inference.py 참조)
+DETECT_WEIGHTS = WEIGHTS_DIR / "best.pt"
+SEGMENT_WEIGHTS = WEIGHTS_DIR / "best-seg.pt"
 STATIC_DIR = BASE_DIR / "static"
 
 
@@ -22,11 +23,12 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(engine)
     # 기존 검사 이력이 있는 DB에는 세그멘테이션 컬럼이 없으므로 여기서 보충한다
     ensure_columns("defects", {"polygon": "JSON", "area_px": "FLOAT"})
-    # 학습된 가중치가 하나도 없으면 사전학습 기본 모델로 폴백 (파이프라인 개발용)
-    weights = next((p for p in WEIGHTS_CANDIDATES if p.exists()), "yolo11n.pt")
-    app.state.detector = Detector(weights)
-    mode = "segmentation (면적 계측 지원)" if app.state.detector.supports_mask else "detection"
-    print(f"[FactoryVision] model loaded: {weights} — {mode}")
+    # 판정 모델이 없으면 사전학습 기본 모델로 폴백 (가중치 없는 클론에서도 서버가 뜬다)
+    detect = DETECT_WEIGHTS if DETECT_WEIGHTS.exists() else "yolo11n.pt"
+    segment = SEGMENT_WEIGHTS if SEGMENT_WEIGHTS.exists() else None
+    app.state.detector = Detector(detect, segment)
+    print(f"[FactoryVision] 판정 모델: {detect}")
+    print(f"[FactoryVision] 계측 모델: {segment or '없음 (면적 계측 비활성)'}")
     yield
 
 

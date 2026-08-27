@@ -1,22 +1,42 @@
 /**
- * 배포된 모델(best-seg.pt)의 실측 성능.
- * 검증 데이터셋 1,592장(결함 3,266개)에 model.val()을 독립 실행해 얻은 값이다.
- * 학습 직후 검증값과 0.01 내외로 차이가 나는데, 여기서는 재현이 쉬운
- * 독립 실행 결과를 싣는다. 모델을 교체하면 재평가 후 이 값과
- * public/model/ 의 플롯 이미지를 갱신할 것.
+ * 배포된 두 모델의 실측 성능. 검증 데이터셋 1,592장(결함 3,266개) 기준.
  *
- * Box는 결함 위치(사각형) 검출 성능, Mask는 결함 영역(픽셀 단위) 분할 성능이다.
- * 면적 계측은 Mask에 근거하므로 대표 지표로 Mask mAP50을 쓴다.
+ * 판정과 계측을 서로 다른 모델이 담당한다.
+ *  - 판정 모델(YOLO11n): 결함의 유무·종류·위치. 원본 어노테이션 기준으로 평가.
+ *  - 계측 모델(YOLO11n-seg): 결함 영역의 면적. SAM으로 생성한 폴리곤 라벨 기준으로 평가.
+ *
+ * 두 지표는 채점 기준이 되는 라벨이 서로 달라 직접 비교할 수 없다.
+ * 계측 모델을 원본 박스 라벨로 재보면 Box mAP50이 0.604로, 판정에는 부적합하다.
+ * SAM 마스크가 원본 박스보다 결함에 밀착해 예측 박스가 좁게 나오기 때문이다.
  */
 export const MODEL_METRICS = {
-  model: "YOLO11n-seg fine-tuned",
   dataset: "PCB 결함 6클래스",
   trainImages: 5583,
   valImages: 1592,
   valInstances: 3266,
   evaluatedAt: "2026-08-27",
-  box: { map50: 0.9133, map5095: 0.4805, precision: 0.878, recall: 0.894 },
-  mask: { map50: 0.8289, map5095: 0.3306, precision: 0.8122, recall: 0.8285 },
+
+  detect: {
+    model: "YOLO11n",
+    role: "판정 — 결함 유무·종류·위치",
+    basis: "원본 어노테이션 기준",
+    map50: 0.9849,
+    map5095: 0.5525,
+    precision: 0.9761,
+    recall: 0.9852,
+  },
+
+  segment: {
+    model: "YOLO11n-seg",
+    role: "계측 — 결함 영역의 픽셀 면적",
+    basis: "SAM 생성 폴리곤 라벨 기준",
+    map50: 0.8289,
+    map5095: 0.3306,
+    precision: 0.8122,
+    recall: 0.8285,
+  },
+
+  /** 클래스별 영역 분할 정확도 (계측 모델) */
   perClass: [
     { name: "missing_hole", map50: 0.9915, map5095: 0.593 },
     { name: "spurious_copper", map50: 0.8533, map5095: 0.334 },

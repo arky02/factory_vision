@@ -10,20 +10,82 @@ export const layout = style({
   },
 });
 
-export const summaryGrid = style({
+/** 판정 모델 / 계측 모델을 나란히 배치 */
+export const modelGrid = style({
   display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
   gap: "0.75rem",
-  marginBottom: "1.25rem",
+  marginBottom: "1rem",
   "@media": {
-    "(min-width: 640px)": { gridTemplateColumns: "repeat(4, 1fr)" },
+    "(min-width: 640px)": { gridTemplateColumns: "repeat(2, 1fr)" },
   },
 });
 
-export const summaryItem = style({
+export const modelBlock = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.375rem",
   borderRadius: `calc(${vars.radius} - 2px)`,
   border: `1px solid ${vars.border}`,
-  padding: "0.75rem",
+  padding: "1rem",
+});
+
+export const modelRole = style({
+  fontSize: font.xs,
+  fontWeight: 600,
+  color: vars.foreground,
+});
+
+export const modelName = style({
+  fontSize: font.xs,
+  color: vars.mutedForeground,
+  fontVariantNumeric: "tabular-nums",
+});
+
+export const headline = style({
+  display: "flex",
+  alignItems: "baseline",
+  justifyContent: "space-between",
+  gap: "0.5rem",
+  marginTop: "0.25rem",
+});
+
+export const headlineLabel = style({
+  fontSize: font.xs,
+  color: vars.mutedForeground,
+});
+
+export const headlineValue = style({
+  fontSize: font.xxl,
+  fontWeight: 600,
+  fontVariantNumeric: "tabular-nums",
+});
+
+export const subMetrics = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.125rem",
+  margin: 0,
+});
+
+export const subMetricRow = style({
+  display: "flex",
+  justifyContent: "space-between",
+  gap: "0.5rem",
+});
+
+export const subMetricValue = style({
+  margin: 0,
+  fontSize: font.xs,
+  fontVariantNumeric: "tabular-nums",
+  color: vars.foreground,
+});
+
+export const basis = style({
+  marginTop: "0.25rem",
+  paddingTop: "0.5rem",
+  borderTop: `1px solid ${vars.border}`,
+  fontSize: font.xs,
+  color: vars.mutedForeground,
 });
 
 export const summaryLabel = style({

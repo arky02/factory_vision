@@ -9,41 +9,30 @@ import { formatPercent } from "@/lib/format";
 import * as styles from "./model-info-card.css";
 import { MODEL_METRICS as m } from "./model-metrics";
 
-/** 배포된 모델의 실측 성능 요약 (검증셋 평가 결과) */
+/** 배포된 두 모델의 실측 성능 (검증셋 평가 결과) */
 export function ModelInfoCard() {
-  // 면적 계측은 마스크에 근거하므로 마스크 지표를 대표로 보여주고, 박스 지표는 대조로 둔다
-  const summary = [
-    { label: "Mask mAP50", value: formatPercent(m.mask.map50) },
-    { label: "Mask mAP50-95", value: formatPercent(m.mask.map5095) },
-    { label: "Mask Precision", value: formatPercent(m.mask.precision) },
-    { label: "Mask Recall", value: formatPercent(m.mask.recall) },
-  ];
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>AI 모델 성능</CardTitle>
         <CardDescription>
-          {m.model} · {m.dataset} · 학습 {m.trainImages.toLocaleString()}장 /
-          검증 {m.valImages.toLocaleString()}장(결함{" "}
-          {m.valInstances.toLocaleString()}개) 기준 실측 ({m.evaluatedAt})
+          {m.dataset} · 학습 {m.trainImages.toLocaleString()}장 / 검증{" "}
+          {m.valImages.toLocaleString()}장(결함 {m.valInstances.toLocaleString()}
+          개) 기준 실측 ({m.evaluatedAt})
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className={styles.summaryGrid}>
-          {summary.map(({ label, value }) => (
-            <div key={label} className={styles.summaryItem}>
-              <p className={styles.summaryLabel}>{label}</p>
-              <p className={styles.summaryValue}>{value}</p>
-            </div>
-          ))}
+        <div className={styles.modelGrid}>
+          <ModelBlock metrics={m.detect} primary="mAP50" />
+          <ModelBlock metrics={m.segment} primary="Mask mAP50" />
         </div>
 
         <p className={styles.note}>
-          결함 위치를 사각형으로 찾는 성능(Box)은 mAP50{" "}
-          <strong>{formatPercent(m.box.map50)}</strong>입니다. 영역을 픽셀 단위로
-          분할하는 Mask 지표가 더 낮은 것은, 경계까지 맞춰야 해 채점 기준이 훨씬
-          엄격하기 때문입니다.
+          두 지표는 채점 기준이 되는 라벨이 서로 달라 직접 비교할 수 없습니다. 판정
+          모델은 사람이 그린 원본 어노테이션으로, 계측 모델은 SAM으로 생성한 폴리곤
+          라벨로 평가했습니다. 계측 모델을 원본 박스 기준으로 재보면 mAP50이 0.604로
+          판정에는 맞지 않는데, SAM 마스크가 원본 박스보다 결함에 밀착해 예측 박스가
+          좁게 나오기 때문입니다. 그래서 판정과 계측을 나눴습니다.
         </p>
 
         <div className={styles.layout}>
@@ -88,5 +77,51 @@ export function ModelInfoCard() {
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+interface ModelMetrics {
+  model: string;
+  role: string;
+  basis: string;
+  map50: number;
+  map5095: number;
+  precision: number;
+  recall: number;
+}
+
+function ModelBlock({
+  metrics,
+  primary,
+}: {
+  metrics: ModelMetrics;
+  primary: string;
+}) {
+  const rows = [
+    { label: "mAP50-95", value: metrics.map5095 },
+    { label: "Precision", value: metrics.precision },
+    { label: "Recall", value: metrics.recall },
+  ];
+
+  return (
+    <div className={styles.modelBlock}>
+      <p className={styles.modelRole}>{metrics.role}</p>
+      <p className={styles.modelName}>{metrics.model}</p>
+      <div className={styles.headline}>
+        <span className={styles.headlineLabel}>{primary}</span>
+        <span className={styles.headlineValue}>
+          {formatPercent(metrics.map50)}
+        </span>
+      </div>
+      <dl className={styles.subMetrics}>
+        {rows.map(({ label, value }) => (
+          <div key={label} className={styles.subMetricRow}>
+            <dt className={styles.summaryLabel}>{label}</dt>
+            <dd className={styles.subMetricValue}>{formatPercent(value)}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className={styles.basis}>{metrics.basis}</p>
+    </div>
   );
 }
