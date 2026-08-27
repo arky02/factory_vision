@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown, Workflow } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Fragment, useState } from "react";
 
 import type { DetectionResponse } from "@/api/types";
