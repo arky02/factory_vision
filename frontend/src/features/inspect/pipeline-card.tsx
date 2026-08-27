@@ -64,7 +64,8 @@ function PipelinePlaceholder() {
   return (
     <div className={styles.placeholder}>
       <Workflow size={16} aria-hidden />
-      검사를 시작하면 표시됩니다.
+      전처리 
+      전처리부터 검출까지 단계별 결과를 보여줍니다.
     </div>
   );
 }
