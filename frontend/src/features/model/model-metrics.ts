@@ -18,7 +18,7 @@ export const MODEL_METRICS = {
 
   detect: {
     model: "YOLO11n",
-    role: "판정 — 결함 유무·종류·위치",
+    role: "판정",
     basis: "원본 어노테이션 기준",
     map50: 0.9849,
     map5095: 0.5525,
@@ -28,8 +28,8 @@ export const MODEL_METRICS = {
 
   segment: {
     model: "YOLO11n-seg",
-    role: "계측 — 결함 영역의 픽셀 면적",
-    basis: "SAM 생성 폴리곤 라벨 기준",
+    role: "계측",
+    basis: "SAM 폴리곤 라벨 기준",
     map50: 0.8289,
     map5095: 0.3306,
     precision: 0.8122,

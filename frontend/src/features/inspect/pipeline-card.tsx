@@ -34,9 +34,7 @@ export function PipelineCard({ result }: { result: DetectionResponse | null }) {
       >
         <span className={styles.headerText}>
           <span className={styles.headerTitle}>이미지 처리 과정</span>
-          <span className={styles.headerDescription}>
-            OpenCV 전처리 → YOLO 검출 단계별 이미지
-          </span>
+          <span className={styles.headerDescription}>OpenCV 전처리 → YOLO 검출</span>
         </span>
         <ChevronDown
           size={16}
@@ -118,18 +116,13 @@ function PipelineTrack({
 
   return (
     <>
-      <div className={styles.toolbar}>
-        <p className={styles.toolbarHint}>
-          {showZoom
-            ? "결함 부위를 확대해 단계별 차이를 비교합니다."
-            : "전처리 효과를 자세히 보려면 결함 부위를 확대하세요."}
-        </p>
-        {canZoom && (
+      {canZoom && (
+        <div className={styles.toolbar}>
           <button type="button" className={styles.zoomButton} onClick={onToggleZoom}>
             {showZoom ? "전체 보기" : "결함 확대"}
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className={styles.track}>
         {stages.map((stage, i) => (
