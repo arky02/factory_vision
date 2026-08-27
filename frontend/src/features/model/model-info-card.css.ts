@@ -112,14 +112,6 @@ export const classRow = style({
   gap: "0.5rem",
 });
 
-/** 박스 지표와의 대조 설명 */
-export const note = style({
-  marginBottom: "1.25rem",
-  fontSize: font.xs,
-  lineHeight: 1.6,
-  color: vars.mutedForeground,
-});
-
 export const className = style({
   fontSize: font.xs,
   color: vars.foreground,

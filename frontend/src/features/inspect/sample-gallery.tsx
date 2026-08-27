@@ -43,8 +43,8 @@ export function SampleGallery({ onPick, disabled }: SampleGalleryProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>샘플 테스트</CardTitle>
-        <CardDescription>클릭하면 바로 검사합니다.</CardDescription>
+        <CardTitle>테스트용 샘플 이미지</CardTitle>
+        <CardDescription>성능 테스트용 샘플 이미지입니다.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className={styles.grid}>

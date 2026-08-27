@@ -63,7 +63,7 @@ export function PipelineCard({ result }: { result: DetectionResponse | null }) {
 function PipelinePlaceholder() {
   return (
     <div className={styles.placeholder}>
-      이미지 전처리 과정 미리보기
+      전처리부터 검출까지 단계별 미리보기
     </div>
   );
 }
