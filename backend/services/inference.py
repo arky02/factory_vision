@@ -30,31 +30,45 @@ MASK_ALPHA = 0.3
 MEASURE_CONF = 0.10
 
 
+FONT = cv2.FONT_HERSHEY_DUPLEX
+
+
 def _render(image: np.ndarray, defects: list[dict]) -> np.ndarray:
     """검출 결과를 이미지에 그린다.
 
     Ultralytics의 result.plot()은 라벨 상자가 결함보다 커서 작은 결함의 형상을 가린다.
     PCB 결함은 수십 픽셀 수준이므로 윤곽선을 직접 그리고 라벨은 최소로 유지한다.
+    업로드 해상도가 제각각이므로 선·글자 굵기는 이미지 크기에 비례시킨다.
     """
     out = image.copy()
     overlay = image.copy()
+    h, w = image.shape[:2]
+
+    scale = max(0.55, min(h, w) / 900)
+    text_thick = max(2, round(scale * 2.2))
+    line_thick = max(2, round(scale * 2.5))
+    pad = round(6 * scale)
 
     for d in defects:
         color = CLASS_COLORS.get(d["type"], DEFAULT_COLOR)
         if d["polygon"]:
             pts = np.array(d["polygon"], np.int32)
             cv2.fillPoly(overlay, [pts], color)
-            cv2.polylines(out, [pts], True, color, 2, cv2.LINE_AA)
-            anchor = (int(pts[:, 0].min()), int(pts[:, 1].min()))
-        else:  # 검출 전용 모델 — 마스크가 없으므로 사각형으로 표시
+            cv2.polylines(out, [pts], True, color, line_thick, cv2.LINE_AA)
+            x, top, bottom = int(pts[:, 0].min()), int(pts[:, 1].min()), int(pts[:, 1].max())
+        else:  # 계측 모델이 대응 인스턴스를 찾지 못한 경우 — 사각형으로 표시
             x1, y1, x2, y2 = d["bbox"]
-            cv2.rectangle(out, (x1, y1), (x2, y2), color, 2)
-            anchor = (x1, y1)
+            cv2.rectangle(out, (x1, y1), (x2, y2), color, line_thick)
+            x, top, bottom = x1, y1, y2
 
-        cv2.putText(out, d["type"], (anchor[0], max(12, anchor[1] - 6)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0), 3, cv2.LINE_AA)
-        cv2.putText(out, d["type"], (anchor[0], max(12, anchor[1] - 6)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, color, 1, cv2.LINE_AA)
+        label = d["type"]
+        (tw, th), _ = cv2.getTextSize(label, FONT, scale, text_thick)
+        # 위쪽에 자리가 없으면 도형 아래에 그린다. 오른쪽으로 넘치면 안쪽으로 당긴다.
+        ty = top - pad if top - th - pad >= 0 else bottom + th + pad
+        tx = min(max(0, x), max(0, w - tw))
+
+        cv2.putText(out, label, (tx, ty), FONT, scale, (0, 0, 0), text_thick + 3, cv2.LINE_AA)
+        cv2.putText(out, label, (tx, ty), FONT, scale, color, text_thick, cv2.LINE_AA)
 
     return cv2.addWeighted(overlay, MASK_ALPHA, out, 1 - MASK_ALPHA, 0)
 
