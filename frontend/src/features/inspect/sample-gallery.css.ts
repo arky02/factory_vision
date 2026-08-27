@@ -2,13 +2,13 @@ import { style } from "@vanilla-extract/css";
 
 import { font, vars } from "../../styles/theme.css";
 
+/* 데스크톱에서는 좁은 좌측 컬럼(업로드 카드 아래)에 들어가므로 3열을 유지한다 */
 export const grid = style({
   display: "grid",
   gap: "0.75rem",
   gridTemplateColumns: "repeat(2, 1fr)",
   "@media": {
-    "(min-width: 640px)": { gridTemplateColumns: "repeat(3, 1fr)" },
-    "(min-width: 1024px)": { gridTemplateColumns: "repeat(6, 1fr)" },
+    "(min-width: 480px)": { gridTemplateColumns: "repeat(3, 1fr)" },
   },
 });
 
@@ -49,13 +49,8 @@ export const thumbnailWide = style({
   aspectRatio: "2 / 1",
 });
 
-export const label = style({
-  fontSize: font.xs,
-  fontWeight: 500,
-  color: vars.foreground,
-});
-
 export const expected = style({
   fontSize: font.xs,
   color: vars.mutedForeground,
+  overflowWrap: "anywhere", // spurious_copper 같은 긴 이름이 좁은 칸을 넘치지 않도록
 });

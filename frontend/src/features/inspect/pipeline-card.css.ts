@@ -88,7 +88,7 @@ export const stage = style({
   flexDirection: "column",
   gap: "0.375rem",
   flexShrink: 0,
-  width: "10.5rem",
+  width: "7.5rem",
 });
 
 const stageFrame = {

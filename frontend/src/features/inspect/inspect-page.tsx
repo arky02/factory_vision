@@ -25,13 +25,17 @@ export function InspectPage() {
       />
       <div className={styles.page}>
         <div className={styles.grid}>
-          <UploadCard
-            file={file}
-            onSelect={handleSelect}
-            onSubmit={() => file && detect.mutate(file)}
-            isPending={detect.isPending}
-          />
-          <div className={styles.rightColumn}>
+          {/* 좌: 검사할 이미지를 고르는 영역 / 우: 결과 */}
+          <div className={styles.column}>
+            <UploadCard
+              file={file}
+              onSelect={handleSelect}
+              onSubmit={() => file && detect.mutate(file)}
+              isPending={detect.isPending}
+            />
+            <SampleGallery onPick={handleSelect} disabled={detect.isPending} />
+          </div>
+          <div className={styles.column}>
             <DetectionResultCard
               result={detect.data ?? null}
               isPending={detect.isPending}
@@ -39,7 +43,6 @@ export function InspectPage() {
             <PipelineCard result={detect.data ?? null} />
           </div>
         </div>
-        <SampleGallery onPick={handleSelect} disabled={detect.isPending} />
       </div>
     </>
   );

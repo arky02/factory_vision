@@ -15,13 +15,14 @@ const STAGE_LABELS: Record<string, { title: string; description: string }> = {
 };
 
 /** 확대 시 결함이 타일에서 차지할 비율 — 이 값에 맞춰 배율을 역산한다 */
-const DEFECT_FILL = 0.35;
-const ZOOM_RANGE = [3, 12] as const;
+const DEFECT_FILL = 0.5;
+const ZOOM_RANGE = [2, 6] as const;
 
 /** OpenCV 전처리 → YOLO 검출까지의 이미지 처리 과정 */
 export function PipelineCard({ result }: { result: DetectionResponse | null }) {
   const [open, setOpen] = useState(true);
-  const [zoomed, setZoomed] = useState(true);
+  // 기본은 전체 이미지. 전처리 효과를 자세히 볼 때만 결함 부위를 확대한다.
+  const [zoomed, setZoomed] = useState(false);
 
   return (
     <Card className={styles.card}>
@@ -120,8 +121,8 @@ function PipelineTrack({
       <div className={styles.toolbar}>
         <p className={styles.toolbarHint}>
           {showZoom
-            ? "검출된 결함 부위를 확대해 단계별 차이를 비교합니다."
-            : "이미지 전체를 표시합니다."}
+            ? "결함 부위를 확대해 단계별 차이를 비교합니다."
+            : "전처리 효과를 자세히 보려면 결함 부위를 확대하세요."}
         </p>
         {canZoom && (
           <button type="button" className={styles.zoomButton} onClick={onToggleZoom}>

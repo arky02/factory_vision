@@ -16,8 +16,8 @@ export const grid = style({
   },
 });
 
-/* 검사 결과 + 이미지 처리 과정을 세로로 쌓는 우측 컬럼 */
-export const rightColumn = style({
+/* 좌우 컬럼 공통 — 카드를 세로로 쌓는다 */
+export const column = style({
   display: "flex",
   flexDirection: "column",
   gap: "1.5rem",

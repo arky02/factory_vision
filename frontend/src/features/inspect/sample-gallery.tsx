@@ -14,14 +14,18 @@ interface Sample {
   wide?: boolean;
 }
 
-/** public/samples/ 의 검증된 샘플. expected는 정답 라벨(모델 검출 결과와 일치 확인됨) */
+/**
+ * public/samples/ 의 검증된 샘플. expected는 해당 이미지에 담긴 결함 유형이다.
+ * 검출 개수는 모델을 교체하면 달라지므로 유형만 적는다.
+ */
 const SAMPLES: Sample[] = [
-  { id: "missing-hole",  expected: "missing_hole, missing_hole" },
-  { id: "mouse-bite",  expected: "mouse_bite, mouse_bite" },
-  { id: "open-circuit",  expected: "open_circuit, open_circuit" },
-  { id: "short",  expected: "short, short" },
-  { id: "spur",  expected: "spur, spur, spur" },
-  { id: "spurious-copper",  expected: "spurious_copper, spurious_copper" },
+  { id: "missing-hole", expected: "missing_hole" },
+  { id: "mouse-bite", expected: "mouse_bite" },
+  { id: "open-circuit", expected: "open_circuit" },
+  { id: "short", expected: "short" },
+  { id: "spur", expected: "spur" },
+  { id: "spurious-copper", expected: "spurious_copper" },
+  { id: "multi-defect", expected: "short + missing_hole", wide: true },
 ];
 
 interface SampleGalleryProps {
@@ -40,13 +44,11 @@ export function SampleGallery({ onPick, disabled }: SampleGalleryProps) {
     <Card>
       <CardHeader>
         <CardTitle>샘플 테스트</CardTitle>
-        <CardDescription>
-          샘플 이미지로 테스트 해볼 수 있습니다. 하단 텍스트는 해당 샘플에서 검출되어야 하는 결함 라벨입니다.
-        </CardDescription>
+        <CardDescription>클릭하면 바로 검사합니다.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className={styles.grid}>
-          {SAMPLES.map((sample, index) => (
+          {SAMPLES.map((sample) => (
             <button
               key={sample.id}
               type="button"
@@ -56,11 +58,10 @@ export function SampleGallery({ onPick, disabled }: SampleGalleryProps) {
             >
               <img
                 src={`/samples/${sample.id}.jpg`}
-                alt={`${sample.id} 샘플 PCB 이미지`}
+                alt={`${sample.expected} 결함이 있는 PCB 샘플`}
                 loading="lazy"
                 className={cn(styles.thumbnail, sample.wide && styles.thumbnailWide)}
               />
-              <span className={styles.label}>{`샘플 #${index + 1}`}</span>
               <span className={styles.expected}>{sample.expected}</span>
             </button>
           ))}
