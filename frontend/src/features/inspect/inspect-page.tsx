@@ -21,7 +21,7 @@ export function InspectPage() {
     <>
       <PageHeader
         title="불량 검사"
-        description="PCB 이미지를 올려 결함을 검출합니다."
+        description="PCB 이미지에서 결함을 검출합니다."
       />
       <div className={styles.page}>
         <div className={styles.grid}>
