@@ -65,7 +65,7 @@ function PipelinePlaceholder() {
     <div className={styles.placeholder}>
       <Workflow size={16} aria-hidden />
       전처리 
-      전처리부터 검출까지 단계별 결과를 보여줍니다.
+      이미지 전처리 과정 미리보기
     </div>
   );
 }
