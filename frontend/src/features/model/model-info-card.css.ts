@@ -173,7 +173,14 @@ export const caption = style({
 });
 
 export const sectionTitle = style({
-  marginBottom: "0.75rem",
+  marginBottom: "0.25rem",
   fontSize: font.sm,
   fontWeight: 600,
+});
+
+/** 제목 바로 아래 붙는 범례 */
+export const sectionCaption = style({
+  marginBottom: "0.75rem",
+  fontSize: font.xs,
+  color: vars.mutedForeground,
 });

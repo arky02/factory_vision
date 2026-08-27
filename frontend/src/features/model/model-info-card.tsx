@@ -32,6 +32,7 @@ export function ModelInfoCard() {
         <div className={styles.layout}>
           <section>
             <h3 className={styles.sectionTitle}>클래스별 영역 분할 정확도</h3>
+            <p className={styles.sectionCaption}>왼쪽 mAP50 · 오른쪽 mAP50-95</p>
             <div className={styles.classList}>
               {m.perClass.map(({ name, map50, map5095 }) => (
                 <div key={name} className={styles.classRow}>
@@ -49,7 +50,6 @@ export function ModelInfoCard() {
                 </div>
               ))}
             </div>
-            <p className={styles.caption}>왼쪽 mAP50 · 오른쪽 mAP50-95</p>
           </section>
 
           <figure className={styles.matrixFigure}>
