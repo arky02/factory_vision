@@ -3,6 +3,8 @@ export interface Defect {
   type: string;
   confidence: number;
   bbox: [number, number, number, number]; // [x1, y1, x2, y2]
+  polygon: [number, number][] | null; // 결함 외곽 (세그멘테이션 모델일 때만)
+  area_px: number | null; // 결함 픽셀 면적
 }
 
 /** 전처리 파이프라인 단계 이미지 */
@@ -25,6 +27,8 @@ export interface InspectionDefect {
   defect_type: string;
   confidence: number;
   bbox: number[];
+  polygon: [number, number][] | null;
+  area_px: number | null;
 }
 
 /** GET /stats/summary 응답 */

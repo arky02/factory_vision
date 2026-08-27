@@ -46,7 +46,13 @@ async def detect(request: Request, file: UploadFile = File(...), db: Session = D
         detected_image_path=detected_path,
         inspection_result="NG" if defects else "OK",
         defects=[
-            Defect(defect_type=d["type"], confidence=d["confidence"], bbox=d["bbox"])
+            Defect(
+                defect_type=d["type"],
+                confidence=d["confidence"],
+                bbox=d["bbox"],
+                polygon=d["polygon"],
+                area_px=d["area_px"],
+            )
             for d in defects
         ],
     )

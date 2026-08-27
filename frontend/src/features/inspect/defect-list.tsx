@@ -2,6 +2,7 @@ import { CheckCircle2 } from "lucide-react";
 
 import type { Defect } from "@/api/types";
 import { Badge } from "@/components/ui/badge";
+import { formatArea } from "@/lib/format";
 import * as styles from "./defect-list.css";
 
 export function DefectList({ defects }: { defects: Defect[] }) {
@@ -18,7 +19,12 @@ export function DefectList({ defects }: { defects: Defect[] }) {
     <ul className={styles.list} aria-label="검출된 결함 목록">
       {defects.map((defect, i) => (
         <li key={i} className={styles.item}>
-          <Badge variant="secondary">{defect.type}</Badge>
+          <div className={styles.info}>
+            <Badge variant="secondary">{defect.type}</Badge>
+            {defect.area_px !== null && (
+              <span className={styles.area}>면적 {formatArea(defect.area_px)}</span>
+            )}
+          </div>
           <ConfidenceRing value={defect.confidence} />
         </li>
       ))}

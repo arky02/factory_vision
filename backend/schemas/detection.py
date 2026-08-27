@@ -7,6 +7,8 @@ class Defect(BaseModel):
     type: str
     confidence: float
     bbox: list[int]  # [x1, y1, x2, y2]
+    polygon: list[list[int]] | None = None  # 결함 외곽 (세그멘테이션 모델일 때만)
+    area_px: float | None = None  # 결함 픽셀 면적
 
 
 class PipelineStage(BaseModel):
@@ -28,6 +30,8 @@ class DefectItem(BaseModel):
     defect_type: str
     confidence: float
     bbox: list[int]
+    polygon: list[list[int]] | None = None
+    area_px: float | None = None
 
 
 class InspectionItem(BaseModel):

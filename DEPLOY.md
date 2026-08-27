@@ -114,9 +114,45 @@ S3_BUCKET=factory-vision-web ./scripts/deploy-frontend.sh
 | 백엔드 수정 | EC2에서 `git pull && docker compose up -d --build` |
 | 모델 교체 | 새 `best.pt` scp → `docker compose restart backend` |
 
-## 5. 커스텀 도메인 (선택, 나중에)
+## 5. 커스텀 도메인
 
-도메인 구매 후: ACM(버지니아 리전)에서 무료 인증서 발급 → CloudFront 배포에 대체 도메인(CNAME) + 인증서 연결 → DNS에 CNAME 레코드 추가. 코드·인프라 변경 없음.
+도메인은 가비아에서 구매하고 DNS도 가비아에 두었다 (Route 53 비용 회피). 코드 변경은 필요 없다 —
+프론트는 전부 상대경로이고, CI 헬스체크는 CloudFront 기본 도메인을 쓰기 때문이다.
+
+### 서브도메인 추가 절차
+
+CloudFront는 배포당 인증서를 하나만 붙일 수 있으므로, 별칭을 여러 개 쓰려면
+**모든 별칭을 포함하는 인증서 하나**가 필요하다. `*.kiyeon.site` 와일드카드로 발급해두면
+이후 서브도메인은 인증서 재발급 없이 별칭만 추가하면 된다.
+
+```bash
+# 1) 와일드카드 인증서 발급 요청 (CloudFront는 us-east-1 인증서만 받는다)
+aws acm request-certificate --region us-east-1 \
+  --domain-name "*.kiyeon.site" --subject-alternative-names "kiyeon.site" \
+  --validation-method DNS --query CertificateArn --output text
+
+# 2) 검증용 CNAME 이름·값 확인 → 가비아 DNS에 등록
+aws acm describe-certificate --region us-east-1 --certificate-arn <ARN> \
+  --query "Certificate.DomainValidationOptions[].ResourceRecord" --output table
+
+# 3) 발급 완료까지 대기 (가비아 레코드 반영 후 보통 수 분)
+aws acm wait certificate-validated --region us-east-1 --certificate-arn <ARN>
+
+# 4) CloudFront에 별칭 + 인증서 연결
+#    get-distribution-config로 현재 설정을 받아 Aliases에 도메인을 추가하고
+#    ViewerCertificate를 새 ARN으로 바꾼 뒤 update-distribution --if-match <ETag>
+```
+
+마지막으로 가비아 DNS에 새 서브도메인 → `<배포ID>.cloudfront.net` CNAME을 추가한다.
+
+> 기존 별칭은 지우지 말 것. 새 주소가 뜨는 것을 확인한 뒤 정리해야 데모 링크가 끊기지 않는다.
+
+**현재 연결된 주소**
+
+| 주소 | 용도 |
+| --- | --- |
+| `https://fv.kiyeon.site` | 기존 데모 주소 |
+| `https://d3978jxy8ggw6e.cloudfront.net` | CloudFront 기본 도메인 (CI 헬스체크용) |
 
 ## 비용 (서울 리전, 대략)
 

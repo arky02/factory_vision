@@ -32,6 +32,21 @@ export const item = style({
   padding: "0.5rem 0.625rem",
 });
 
+export const info = style({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  gap: "0.25rem",
+  minWidth: 0,
+});
+
+/** 세그멘테이션 마스크에서 산출한 결함 면적 */
+export const area = style({
+  fontSize: font.xs,
+  color: vars.mutedForeground,
+  fontVariantNumeric: "tabular-nums",
+});
+
 /* 확신도 원형 게이지 */
 export const ringTrack = style({
   fill: "none",

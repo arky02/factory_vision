@@ -26,5 +26,8 @@ class Defect(Base):
     defect_type: Mapped[str] = mapped_column(String(50), index=True)
     confidence: Mapped[float] = mapped_column(Float)
     bbox: Mapped[list] = mapped_column(JSON)  # [x1, y1, x2, y2]
+    # 아래 둘은 세그멘테이션 모델일 때만 채워진다 (검출 전용 모델이면 NULL)
+    polygon: Mapped[list | None] = mapped_column(JSON, nullable=True)  # [[x, y], ...] 결함 외곽
+    area_px: Mapped[float | None] = mapped_column(Float, nullable=True)  # 결함 픽셀 면적
 
     inspection: Mapped[Inspection] = relationship(back_populates="defects")

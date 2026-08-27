@@ -45,9 +45,17 @@ export const classList = style({
 
 export const classRow = style({
   display: "grid",
-  gridTemplateColumns: "8.5rem 1fr 3.25rem",
+  gridTemplateColumns: "8.5rem 1fr 3.25rem 3.25rem",
   alignItems: "center",
-  gap: "0.75rem",
+  gap: "0.5rem",
+});
+
+/** 박스 지표와의 대조 설명 */
+export const note = style({
+  marginBottom: "1.25rem",
+  fontSize: font.xs,
+  lineHeight: 1.6,
+  color: vars.mutedForeground,
 });
 
 export const className = style({
@@ -69,6 +77,14 @@ export const barFill = style({
 });
 
 export const barValue = style({
+  textAlign: "right",
+  fontSize: font.xs,
+  fontVariantNumeric: "tabular-nums",
+  color: vars.foreground,
+});
+
+/** 부가 지표(mAP50-95) — 주 지표보다 약하게 */
+export const barValueSub = style({
   textAlign: "right",
   fontSize: font.xs,
   fontVariantNumeric: "tabular-nums",

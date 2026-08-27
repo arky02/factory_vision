@@ -5,23 +5,28 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from database import Base, engine
+from database import Base, engine, ensure_columns
 from models import inspection as _models  # 테이블 정의 등록  # noqa: F401
 from routers import detect, inspections, stats
 from services.inference import Detector
 
 BASE_DIR = Path(__file__).parent
-WEIGHTS_PATH = BASE_DIR / "yolo" / "weights" / "best.pt"
+WEIGHTS_DIR = BASE_DIR / "yolo" / "weights"
+# 세그멘테이션 가중치를 우선 사용한다 (결함 면적 계측 지원). 없으면 검출 전용으로 폴백.
+WEIGHTS_CANDIDATES = [WEIGHTS_DIR / "best-seg.pt", WEIGHTS_DIR / "best.pt"]
 STATIC_DIR = BASE_DIR / "static"
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(engine)
-    # best.pt가 없으면 사전학습 기본 모델로 폴백 (파이프라인 개발용)
-    weights = WEIGHTS_PATH if WEIGHTS_PATH.exists() else "yolo11n.pt"
+    # 기존 검사 이력이 있는 DB에는 세그멘테이션 컬럼이 없으므로 여기서 보충한다
+    ensure_columns("defects", {"polygon": "JSON", "area_px": "FLOAT"})
+    # 학습된 가중치가 하나도 없으면 사전학습 기본 모델로 폴백 (파이프라인 개발용)
+    weights = next((p for p in WEIGHTS_CANDIDATES if p.exists()), "yolo11n.pt")
     app.state.detector = Detector(weights)
-    print(f"[FactoryVision] model loaded: {weights}")
+    mode = "segmentation (면적 계측 지원)" if app.state.detector.supports_mask else "detection"
+    print(f"[FactoryVision] model loaded: {weights} — {mode}")
     yield
 
 

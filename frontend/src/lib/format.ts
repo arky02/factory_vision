@@ -16,3 +16,8 @@ export function formatDateTime(iso: string): string {
 export function formatPercent(ratio: number, digits = 1): string {
   return `${(ratio * 100).toFixed(digits)}%`;
 }
+
+/** 결함 면적 — 세그멘테이션 마스크에서 산출한 픽셀 수 */
+export function formatArea(px: number): string {
+  return `${Math.round(px).toLocaleString("ko-KR")} px`;
+}

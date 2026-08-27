@@ -46,6 +46,13 @@ export const defectPanelTitle = style({
   fontWeight: 600,
 });
 
+/** 세그멘테이션 마스크에서 합산한 총 결함 면적 */
+export const totalArea = style({
+  fontSize: font.xs,
+  color: vars.mutedForeground,
+  fontVariantNumeric: "tabular-nums",
+});
+
 export const defectPanelScroll = style({
   overflowY: "auto",
 });
